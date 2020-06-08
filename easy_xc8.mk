@@ -30,6 +30,6 @@ endif
 # **************************************************************************** #
 # include the other makefile pieces
 
-include toolchain/venv.mk
-include toolchain/variables.mk
-include toolchain/targets.mk
+include $(TOOLCHAIN_DIR)/makefiles/venv.mk
+include $(TOOLCHAIN_DIR)/makefiles/variables.mk
+include $(TOOLCHAIN_DIR)/makefiles/targets.mk
