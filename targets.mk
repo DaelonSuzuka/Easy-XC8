@@ -2,10 +2,10 @@
 # Primary targets
 	
 # Build the project
-compile: venv project_hex
+compile: venv $(PROJECT_HEX)
 
 # Upload the hex file to the target device
-upload: venv project_hex 
+upload: venv $(PROJECT_HEX) 
 	$(VENV_PYTHON) $(TOOLCHAIN_DIR)/scripts/upload.py
 
 # Remove the compiler outputs

@@ -1,5 +1,4 @@
 # **************************************************************************** #
-# Project stuff
 
 # Project name 
 PROJECT := $(shell $(PYTHON) $(TOOLCHAIN_DIR)/scripts/load_vars.py name)
@@ -20,9 +19,13 @@ PROJECT_FILES += $(PROJECT_FILE)
 # The build script
 PROJECT_FILES += $(TOOLCHAIN_DIR)/scripts/build.py
 
-# 
-project_hex: $(BUILD_DIR)/$(PROJECT).hex 
-$(BUILD_DIR)/$(PROJECT).hex: $(PROJECT_FILES) | obj_dir build_dir
+# **************************************************************************** #
+
+# The hex file we're trying to end up with 
+PROJECT_HEX = $(BUILD_DIR)/$(PROJECT).hex 
+
+# The build rules for the hex file
+$(PROJECT_HEX): $(PROJECT_FILES) | $(OBJ_DIR) $(BUILD_DIR)
 	$(VENV_PYTHON) $(TOOLCHAIN_DIR)/scripts/build.py
 
 # **************************************************************************** #
@@ -34,10 +37,8 @@ else
 MK_DIR := mkdir -p
 endif
 
-obj_dir: $(OBJ_DIR)
 $(OBJ_DIR):
 	$(MK_DIR) $(OBJ_DIR)
 
-build_dir: $(BUILD_DIR)
 $(BUILD_DIR):
 	$(MK_DIR) $(BUILD_DIR)
