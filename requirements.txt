@@ -1,0 +1,5 @@
+-e git://github.com/DaelonSuzuka/CodeGen.git#egg=CodeGen
+cogapp==3.0.0
+-e git://github.com/DaelonSuzuka/CogUtils.git#egg=CogUtils
+dotmap==1.3.14
+PyYAML==5.3.1

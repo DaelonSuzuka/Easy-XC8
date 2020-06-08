@@ -1,0 +1,73 @@
+{
+    "default": "Pickit4",
+    "Pickit3": {
+        "command": "pk3cmd",
+        "target": "-P",
+        "source": "-F",
+        "flags": [
+            "-M",
+            "-L"
+        ],
+        "garbage": [
+            "log.0",
+            "log.1",
+            "log.2",
+            "MPLABXLog.xml"
+        ]
+    },
+    "Pickit4": {
+        "command": "ipecmd",
+        "target": "-P",
+        "source": "-F",
+        "flags": [
+            "-TPPK4",
+            "-M",
+            "-L"
+        ],
+        "garbage": [
+            "log.0",
+            "log.1",
+            "log.2",
+            "MPLABXLog.xml",
+            "MPLABXLog.xml.lck"
+        ]
+    },
+    "Pickit4-linux": {
+        "command": "ipecmd.sh",
+        "target": "-P",
+        "source": "-F",
+        "flags": [
+            "-TPPK4",
+            "-M",
+            "-L"
+        ],
+        "garbage": [
+            "log.0",
+            "log.1",
+            "log.2",
+            "MPLABXLog.xml",
+            "MPLABXLog.xml.lck"
+        ]
+    },
+    "ICD-U80-win": {
+        "command": "ccsloader",
+        "target": "-DEVICE=PIC",
+        "source": "-WRITE=",
+        "flags": [
+            "-AREAS=ALL",
+            "-POWER=TARGET"
+        ],
+        "garbage": []
+    },
+    "ICD-U80-linux": {
+        "command": "ccsloader",
+        "target": "-DEVICE=PIC",
+        "source": "-WRITE=",
+        "flags": [
+            "-port=COM7",
+            "-AREAS=ALL",
+            "-POWER=TARGET"
+        ],
+        "garbage": []
+    }
+}
