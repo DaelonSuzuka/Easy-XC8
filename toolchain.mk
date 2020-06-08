@@ -12,7 +12,7 @@ SHELL = bash
 endif
 
 # **************************************************************************** #
-# Groudwork
+# Groundwork
 
 # make sure the end user has told us the toolchain directory
 ifndef TOOLCHAIN_DIR
