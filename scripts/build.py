@@ -14,7 +14,7 @@ def xc8_cc(project, standard="C99"):
     command = ["xc8-cc"]
     flag = command.append
 
-    flag(f"-mcpu={project.target}")
+    flag(f"-mcpu={project.processor}")
     flag(f"-std={standard}")
     flag(f"-o {project.build_dir}/{project.name}.hex")
 
@@ -45,7 +45,7 @@ def xc8(project):
     command = ["xc8"]
     flag = command.append
 
-    flag(f"--CHIP={project.target}")  # specify the processor
+    flag(f"--CHIP={project.processor}")  # specify the processor
     flag(f"-O{project.build_dir}/{project.name}")  # location of final results
     flag(f"--OBJDIR={project.obj_dir}")  # intermediate file directory
 

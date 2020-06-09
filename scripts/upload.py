@@ -51,7 +51,7 @@ if __name__ == "__main__":
     try:
         project = DotMap(yaml.full_load(open("project.yaml").read()))
         source = f"{project['build_dir']}/{project.name}.hex"
-        arg("-t", "--target", default=project.target)
+        arg("-t", "--target", default=project.processor)
         arg("-s", "--source", default=source)
         arg("-p", "--programmer", default=project.programmer)
     except:
