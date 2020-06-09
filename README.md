@@ -19,40 +19,20 @@ Programs:
 
 This project is designed to be included in your project as a git "submodule", which will cause a copy of this repo to be downloaded into your project so it can be compiled like normal, but it doesn't add those files to your project's source control. This makes it easier to keep a common set of code in sync between multiple projects without error-prone copy/pasting.
 
-In your own repository, run:
+In your repository, run:
 
 ```
 git submodule add https://github.com/DaelonSuzuka/XC8-Toolchain.git toolchain
+python toolchain/install.py
+make config
 ```
 
-This will add the submodule to your git repository, and download this repo to `./toolchain`.
+This will:
+ - add the submodule to your git repository, and download this repo to `./toolchain`. 
+ - create the minimum usable `Makefile` in the root directory of your project
+ - create `project.yaml` using the project configuration wizard
 
-Once the repo is downloaded, you need to create your own `Makefile` in the root of your project. Assuming you added the submodule to `./toolchain`, that makefile can be as simple as this:
-
-```makefile
-# define the toolchain directory
-TOOLCHAIN_DIR = toolchain
-
-# include the toolchain makefile
-include $(TOOLCHAIN_DIR)/toolchain.mk
-```
-
-
-## Editing `project.yaml`
-
-`project.yaml` is a central place to put information about your project. The makefile and the build scripts all pull information from this file, so if you put stuff here it can't get out of sync. The only field it is ABSOLUTELY MANDATORY is `target: XXXXX`. If you don't select the right chip, then the compiler can't work.
-
-```yaml
-name: project # your project name, will be applied to the output files
-target: 18F27K42 # chip selection for the compiler
-programmer: Pickit4 # which programmer profile to use
-src_dir: src # what folder to look in for source files
-obj_dir: obj # what folder to put intermediate output files in
-build_dir: build # what folder to put the final output files in
-defines: # list of symbols to be passed to the compiler
-  - DEVELOPMENT
-linker_flags: [] # list of linker flags to be passed to the compiler
-```
+You should now be ready to use the Easy-XC8 toolchain.
 
 # Make targets
 

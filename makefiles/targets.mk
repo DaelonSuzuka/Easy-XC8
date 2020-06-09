@@ -30,4 +30,4 @@ docs:
 	
 # run cppcheck
 lint: venv
-	$(VENV_PYTHON) scripts/cppcheck.py	
+	$(VENV_PYTHON) $(TOOLCHAIN_DIR)/scripts/cppcheck.py	
