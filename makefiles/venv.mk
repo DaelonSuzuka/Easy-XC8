@@ -3,17 +3,15 @@
 VENV_NAME := .venv
 
 ifeq ($(OS),Windows_NT)
-	VENV_DIR := $(TOOLCHAIN_DIR)\$(VENV_NAME)\$(OS)
+	VENV_DIR := $(TOOLCHAIN_DIR)\$(VENV_NAME)
 	VENV := $(VENV_DIR)\Scripts
 	PYTHON := python
 	VENV_PYTHON := $(VENV)\$(PYTHON)
-	VENV_MARKER := $(VENV)\.initialized-with-Makefile.venv
 else
-	VENV_DIR := $(TOOLCHAIN_DIR)/$(VENV_NAME)/$(OS)
+	VENV_DIR := $(TOOLCHAIN_DIR)/$(VENV_NAME)
 	VENV := $(VENV_DIR)/bin
 	PYTHON := python3
 	VENV_PYTHON := $(VENV)/$(PYTHON)
-	VENV_MARKER := $(VENV)/.initialized-with-Makefile.venv
 endif
 
 # Add this as a requirement to any make target that relies on the venv
