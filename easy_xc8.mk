@@ -4,6 +4,8 @@
 MAKEFLAGS += --no-builtin-rules
 MAKEFLAGS += --warn-undefined-variables
 
+.ONESHELL:
+
 # select shell 
 ifeq ($(OS),Windows_NT)
 SHELL = cmd
