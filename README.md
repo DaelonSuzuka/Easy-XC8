@@ -1,9 +1,5 @@
-# XC8 Toolchain
-MPLABX is terrible. Now you don't have to use it.
-
 # What is this?
-XC8 Toolchain is an uninspired name for a hybrid python/makefile build system that I've developed for working with 8-bit PIC microcontrollers from Microchip. I work exclusively with PIC18's(and mostly with one family) but there's no reason it won't also support any
-
+Easy-XC8 is a hybrid python/makefile build system for working with 8-bit PIC microcontrollers from Microchip. This was developed for use with PIC18s, particularly the K42 family, but there's no reason it can't work with any chip supported by XC8.
 
 # Requirements
 Programs:
@@ -49,6 +45,12 @@ Remove all your build artifacts to start over
 
 ## Other targets
 
+Generate documentation with Doxygen
+> $ make docs
+
+Run the linter to check for errors
+> $ make lint
+
 This is a suprise tool that will help us later:
 > $ make cog 
 
@@ -67,10 +69,6 @@ Delete the venv, the recreate it
 
 
 # Scripts 
-
-## `bootstrap.sh` 
-
-This will make sure that all of the system level requirements are installed. I've tried to make it idempotent, by checking for the presence of each requirement before trying to install it, but I have no idea how fragile it is.
 
 ## `build.py`
 
@@ -108,6 +106,5 @@ Fortunately, the makefile is _supposed_ to handle the entire venv process for yo
 
 - Include VS Code default settings and extension recommendations
 - Figure out how to explain wtf cog is
-- Add a linter, maybe cppcheck
 - how to customize build.py
 - how to customize upload.py
