@@ -21,12 +21,7 @@ endif
 # Run cog to perform in-line code generation
 .PHONY: cog
 cog: venv
-	$(VENV_PYTHON) -m cogapp -Iscripts -p "import cogutils as utils" @cogfiles.txt 
-ifeq ($(OS),Windows_NT)
-	del /s /q src\__pycache__ 1>nul
-else
-	rm -rf ./src/__pycache__
-endif
+	$(VENV_PYTHON) -m cogapp -Iscripts -p "import cogutils as utils" @cogfiles.txt
 
 # generate doxygen output
 docs:
