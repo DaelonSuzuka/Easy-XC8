@@ -18,7 +18,7 @@ This project is designed to be included in your project as a git "submodule", wh
 In your repository, run:
 
 ```
-git submodule add https://github.com/DaelonSuzuka/XC8-Toolchain.git toolchain
+git submodule add https://github.com/DaelonSuzuka/Easy-XC8.git toolchain
 python toolchain/install.py
 make config
 ```
