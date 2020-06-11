@@ -22,7 +22,11 @@ endif
 .PHONY: cog
 cog: venv
 	$(VENV_PYTHON) -m cogapp -Iscripts -p "import cogutils as utils" @cogfiles.txt 
+ifeq ($(OS),Windows_NT)
+	del /s /q src\__pycache__ 1>nul
+else
 	rm -rf ./src/__pycache__
+endif
 
 # generate doxygen output
 docs:
