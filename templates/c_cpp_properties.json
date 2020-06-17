@@ -1,0 +1,46 @@
+{
+    "configurations": [
+        {
+            "name": "Win32",
+            "includePath": [
+                "${workspaceFolder}/src/**",
+                "C:/Microchip/xc8/v2.20/pic/include",
+                "C:/Microchip/xc8/v2.20/pic/include/c90",
+                "C:/Microchip/xc8/v2.20/pic/include/proc"
+            ],
+            "defines": [
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE",
+                "_18F27K42",
+                "DEVELOPMENT"
+            ],
+            "windowsSdkVersion": "10.0.18362.0",
+            "compilerPath": "C:/Microchip/xc8/v2.20/pic/bin/clang.exe",
+            "cStandard": "c99",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "clang-x64"
+        },
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "/opt/Microchip/xc8/v2.20/pic/include",
+                "/opt/Microchip/xc8/v2.20/pic/include/c90",
+                "/opt/Microchip/xc8/v2.20/pic/include/proc"
+            ],
+            "defines": [
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE",
+                "_18F27K42",
+                "DEVELOPMENT"
+            ],
+            "compilerPath": "/opt/Microchip/xc8/v2.20/pic/bin/clang",
+            "cStandard": "c99",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "clang-x64"
+        }
+    ],
+    "version": 4
+}
