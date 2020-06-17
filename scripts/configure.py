@@ -3,6 +3,7 @@ import json
 from pathlib import Path
 from PyInquirer import prompt, print_json, Separator
 
+
 processors = [ 
     '18F24K42 - 20 pins, 1K RAM, 16K ROM',
     '18F25K42 - 20 pins, 2K RAM, 32K ROM',
@@ -18,8 +19,10 @@ processors = [
     '18F57K42 - 48 pins, 8K RAM, 128K ROM',
 ]
 
+
 programmers = json.loads(open(Path(Path(__file__).parent, "upload.json")).read())
 programmer_list = [p for p in programmers.keys() if p != 'default']
+
 
 def validate_name(answer):
     if len(answer) == 0:
