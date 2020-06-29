@@ -21,8 +21,7 @@
         "source": "-F",
         "flags": [
             "-TPPK4",
-            "-M",
-            "-L"
+            "-M"
         ],
         "garbage": [
             "log.0",
