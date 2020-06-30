@@ -2,21 +2,13 @@ from pathlib import Path
 from .utils import hrule, fmt
 
 
-class HeaderFile:
-    def __init__(self, name='', contents=[], includes=[], use_include_guard=True):
-        self.name = ''
-        self.guard_string = ''
+class SourceFile:
+    def __init__(self, name='', contents=[], includes=[]):
         self.contents = []
         self.includes = []
-        self.set_name(name)
+        self.name = name
         self.add_contents(contents)
         self.add_includes(includes)
-        self.use_include_guard = use_include_guard
-
-    def set_name(self, name):
-        self.name = name
-        self.guard_string = '_' + \
-            Path(name).name.replace('.', '_').upper() + '_'
 
     def add_includes(self, includes=[]):
         if includes:
@@ -45,31 +37,19 @@ class HeaderFile:
         self.contents = []
 
     def assemble(self):
-        header = []
-
-        if self.use_include_guard:
-            header.extend([
-                f'#ifndef {self.guard_string}',
-                f'#define {self.guard_string}',
-                '',
-            ])
+        text = []
 
         if self.includes:
-            header.extend(self.includes)
+            text.extend(self.includes)
 
-        header.extend([
-            hrule(),
-            '',
-        ])
-        header.extend(self.contents)
-
-        if self.use_include_guard:
-            header.extend([
+            text.extend([
+                hrule(),
                 '',
-                f'#endif /* {self.guard_string} */',
             ])
 
-        return fmt(header)
+        text.extend(self.contents)
+
+        return fmt(text)
 
     def write(self):
         with open(self.name, 'w') as f:
