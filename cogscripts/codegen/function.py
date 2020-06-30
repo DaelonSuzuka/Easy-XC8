@@ -1,4 +1,4 @@
-class Function():
+class Function:
     def __init__(self,
                  name='func',
                  return_type='void',

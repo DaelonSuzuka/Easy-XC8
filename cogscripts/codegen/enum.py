@@ -1,4 +1,4 @@
-class Enum():
+class Enum:
     def __init__(self,
                  name='',
                  values=[],

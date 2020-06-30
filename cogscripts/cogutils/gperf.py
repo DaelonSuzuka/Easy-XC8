@@ -9,7 +9,7 @@ import codegen as code
 # ------------------------------------------------------------------------------
 
 
-class Gperf():
+class Gperf:
     def __init__(self,
                  strings=[],
                  struct=None,

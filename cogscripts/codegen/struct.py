@@ -1,8 +1,4 @@
-class Struct():
-    name = ''
-    members = []
-    typedef = False
-
+class Struct:
     def __init__(self, name='', members=[], typedef=False):
         self.name = name
         self.members = members
