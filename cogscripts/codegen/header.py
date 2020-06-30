@@ -4,19 +4,25 @@ from .utils import hrule, fmt
 
 class HeaderFile:
     def __init__(self, name='', contents=[], includes=[], use_include_guard=True):
-        self.name = ''
+        self.full_name = ''
         self.guard_string = ''
         self.contents = []
         self.includes = []
-        self.set_name(name)
+
+        self.name = name
         self.add_contents(contents)
         self.add_includes(includes)
         self.use_include_guard = use_include_guard
 
-    def set_name(self, name):
-        self.name = name
-        self.guard_string = '_' + \
-            Path(name).name.replace('.', '_').upper() + '_'
+    @property
+    def name(self):
+        return self._name
+        
+    @name.setter
+    def name(self, name):
+        self.full_name = name
+        self._name = Path(name).name
+        self.guard_string = '_' + self.name.replace('.', '_').upper() + '_'
 
     def add_includes(self, includes=[]):
         if includes:
@@ -72,5 +78,5 @@ class HeaderFile:
         return fmt(header)
 
     def write(self):
-        with open(self.name, 'w') as f:
+        with open(self.full_name, 'w') as f:
             f.write(self.assemble())
