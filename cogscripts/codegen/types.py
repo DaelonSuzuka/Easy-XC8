@@ -1,6 +1,17 @@
-
+type_qualifiers = [
+    'signed',
+    'unsigned',
+    'const',
+    'static',
+    'volatile',
+]
 
 types = [
+    'char',
+    'int',
+    'short',
+    'long',
+    'size_t',
     'uint8_t',
     'uint16_t',
     'uint24_t',
