@@ -193,14 +193,17 @@ def pins_init():
     for p in pins:
         line(f"    // {p.name}")
 
-        if "input" in p.tags:
-            line(f"    TRIS{p.pin[0]}bits.TRIS{p.pin} = 1;")
-        elif "output" in p.tags:
-            line(f"    TRIS{p.pin[0]}bits.TRIS{p.pin} = 0;")
+        if p.pin != 'E3': # RE3 doesn't have a tris bit
+            if "input" in p.tags:
+                line(f"    TRIS{p.pin[0]}bits.TRIS{p.pin} = 1;")
+            elif "output" in p.tags:
+                line(f"    TRIS{p.pin[0]}bits.TRIS{p.pin} = 0;")
 
         if "analog" in p.tags:
             line(f"    ANSEL{p.pin[0]}bits.ANSEL{p.pin} = 1;")
         if "button" in p.tags:
+            line(f"    WPU{p.pin[0]}bits.WPU{p.pin} = 1;")
+        if "pullup" in p.tags:
             line(f"    WPU{p.pin[0]}bits.WPU{p.pin} = 1;")
 
         line("")
