@@ -8,6 +8,10 @@ compile: venv $(PROJECT_HEX)
 upload: venv $(PROJECT_HEX) 
 	$(VENV_PYTHON) $(TOOLCHAIN_DIR)/scripts/upload.py
 
+# Scrape the compiler outputs for data about the build
+reports: venv $(PROJECT_HEX) 
+	$(VENV_PYTHON) $(TOOLCHAIN_DIR)/scripts/reports.py
+
 # Remove the compiler outputs
 clean:
 ifeq ($(OS),Windows_NT)
