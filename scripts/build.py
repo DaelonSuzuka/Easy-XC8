@@ -19,7 +19,7 @@ def xc8_cc(project, standard="C99"):
     flag(f"-o {project.build_dir}/{project.name}.hex")
 
     # pass flags to the linker
-    [flag(f"-W1,{link_flag}") for link_flag in project.linker_flags]
+    [flag(f"-Wl,{link_flag}") for link_flag in project.linker_flags]
     # tell the compiler to define preprocessor symbols
     [flag(f"-D{symbol}") for symbol in project.defines]
     # specify include directories
