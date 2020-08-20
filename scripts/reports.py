@@ -72,7 +72,14 @@ def main(project):
             else:
                 counts[item] = counts[item] + 1
 
-    print(counts)
+    fmt = '{:<25} {:<20} {:<10} {:<3} {:<3} {:<5} {:<10}'
+
+    print('Top 10 RAM consumers:')
+    print(fmt.format(' symbol', ' name', ' type', '', '', ' size', ''))
+    for line in ram[0:10]:
+        parts = line.split(',')
+        print(fmt.format(*parts))
+    
 
 
 if __name__ == "__main__":
