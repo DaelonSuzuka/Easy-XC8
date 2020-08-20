@@ -79,8 +79,8 @@ def xc8(project):
 
 
 def main(project):
-    command = xc8(project)
-    # command = xc8_cc(project)
+    # command = xc8(project)
+    command = xc8_cc(project)
 
     try:
         result = os.system(command)
