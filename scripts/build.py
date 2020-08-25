@@ -18,6 +18,12 @@ def xc8_cc(project, standard="C99"):
     flag(f"-std={standard}")
     flag(f"-o {project.build_dir}/{project.name}.hex")
 
+    # define macros to allow checking compiler version in code
+    if standard == "C99":
+        flag("-D__XC8_CC_C99__")
+    else:
+        flag("-D__XC8_CC_C89__")
+
     # pass flags to the linker
     [flag(f"-Wl,{link_flag}") for link_flag in project.linker_flags]
     # tell the compiler to define preprocessor symbols
@@ -48,6 +54,9 @@ def xc8(project):
     flag(f"--CHIP={project.processor}")  # specify the processor
     flag(f"-O{project.build_dir}/{project.name}")  # location of final results
     flag(f"--OBJDIR={project.obj_dir}")  # intermediate file directory
+
+    # define macro to allow checking compiler version in code
+    flag("-D__XC8_CC_C89__")
 
     # pass flags to the linker
     [flag(f"-L{link_flag}") for link_flag in project.linker_flags]
