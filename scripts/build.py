@@ -88,8 +88,10 @@ def xc8(project):
 
 
 def main(project):
-    # command = xc8(project)
-    command = xc8_cc(project)
+    if project.compiler == 'xc8-cc':
+        command = xc8_cc(project)
+    else:
+        command = xc8(project)
 
     try:
         result = os.system(command)
