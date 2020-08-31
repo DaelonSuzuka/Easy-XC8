@@ -22,8 +22,10 @@ def main(project):
             sys.exit(1)
         
         hexfile = f"{project.build_dir}/{project.name}"
+        old_name = f'{hexfile}.hex'
+        new_name = f'{hexfile}_v{project.sw_version}_{processor}.hex'
 
-        os.rename(f'{hexfile}.hex', f'{hexfile}_{project.processor}.hex')
+        os.rename(old_name, new_name)
 
     sys.exit(0)
 
