@@ -8,6 +8,10 @@ compile: venv $(PROJECT_HEX)
 upload: venv $(PROJECT_HEX) 
 	$(VENV_PYTHON) $(TOOLCHAIN_DIR)/scripts/upload.py
 
+# Build the release binaries
+release: venv
+	$(VENV_PYTHON) $(TOOLCHAIN_DIR)/scripts/release.py
+
 # Scrape the compiler outputs for data about the build
 reports: venv $(PROJECT_HEX) 
 	$(VENV_PYTHON) $(TOOLCHAIN_DIR)/scripts/reports.py
