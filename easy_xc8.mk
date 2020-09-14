@@ -26,7 +26,7 @@ PROJECT_FILE = project.yaml
 
 # make sure PROJECT_FILE exists
 ifeq (,$(wildcard ./$(PROJECT_FILE)))
-$(warning $(PROJECT_FILE) does not exist! Run "make configure" to create it.)
+$(warning $(PROJECT_FILE) does not exist! Run "make config" to create it.)
 endif
 
 # run configuration wizard
