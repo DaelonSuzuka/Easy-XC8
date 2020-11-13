@@ -4,9 +4,11 @@
 import os
 from pathlib import Path
 import shutil
+import json
 
 
 templates_folder = Path(Path(__file__).absolute().parent, 'templates')
+template_files = json.load(open(Path(templates_folder, 'template.json')))
 
 
 def copy_file(filename, dest):
@@ -15,18 +17,6 @@ def copy_file(filename, dest):
     shutil.copyfile(Path(templates_folder, filename), Path(dest))
 
 
-files = {
-    'Makefile': 'Makefile',
-    'c_cpp_properties.json': '.vscode/c_cpp_properties.json',
-    'cogfiles.txt': 'cogfiles.txt',
-    'pins.csv': 'pins.csv',
-    'pins.c': 'src/pins.c',
-    'pins.h': 'src/pins.h',
-    '.clang-format': '.clang-format',
-    '.gitignore': '.gitignore',
-}
-
-
-for name, path in files.items():
+for name, path in template_files.items():
     if not Path(path).exists():
         copy_file(name, path)

@@ -1,0 +1,10 @@
+{
+    "Makefile": "Makefile",
+    "c_cpp_properties.json": ".vscode/c_cpp_properties.json",
+    "cogfiles.txt": "cogfiles.txt",
+    "pins.csv": "pins.csv",
+    "pins.c": "src/pins.c",
+    "pins.h": "src/pins.h",
+    ".clang-format": ".clang-format",
+    ".gitignore": ".gitignore"
+}
