@@ -93,7 +93,8 @@ def xc8(project, files):
 
     return " ".join(command)
 
-def scan_deps(files):
+
+def scan_dependencies(project, files):
     deps = {f: [] for f in files}
 
     def strip_name(name):
@@ -110,22 +111,19 @@ def scan_deps(files):
 
     checked = []
 
-    # walk the dependency tree
-    def check_deps(file):
+    def walk_dep_tree(file):
         if file in checked:
             return []
         checked.append(file)
 
         used = [strip_name(file)]
-        # print(file, deps[file])
         for dep in deps[file]:
             used.append(dep)
             if dep != strip_name(file) and dep in names:
-                used.extend(check_deps(names[dep]))
-        # print(used)
+                used.extend(walk_dep_tree(names[dep]))
         return used
 
-    used_files = check_deps('src/main.c')
+    used_files = walk_dep_tree('src/main.c')
 
     # fix special cases
     if 'uart' in used_files:
@@ -142,29 +140,33 @@ def scan_deps(files):
         if strip_name(f).startswith('sh_'):
             used_files.append(strip_name(f))
 
+    # swap back to full file names
     result = [names[f] for f in set(used_files) if f in names]
 
-    for f in files:
-        if f not in result:
-            print('skipped file:', f)
+    # write the results to file
+    with open(f'{project.build_dir}/skipped_files.txt', 'w') as out:
+        out.write('\n'.join([f for f in files if f not in result]))
 
     return result 
 
 
 def main(project):
-    # get the short hash and other status info of the repo
+    # grab the hash and other status info of the repo
     cmd = 'git describe --always --long --dirty --tags'
     git_hash = subprocess.run(cmd, stdout=subprocess.PIPE)
     project.git_hash = git_hash.stdout.decode().replace('\n', '').replace('-', ':')
 
+    # resolve project dependencies
     files = [f.as_posix() for f in Path(project.src_dir).rglob("*.c")]
-    deps = scan_deps(files)
+    deps = scan_dependencies(project, files)
 
+    # assemble the compile command
     if project.compiler == 'xc8-cc':
         command = xc8_cc(project)
     else:
         command = xc8(project, deps)
 
+    # engage
     try:
         result = os.system(command)
     except KeyboardInterrupt:
