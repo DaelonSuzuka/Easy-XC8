@@ -4,20 +4,36 @@ from pathlib import Path
 from PyInquirer import prompt, print_json, Separator
 
 
-processors = [ 
-    '18F24K42 - 20 pins, 1K RAM, 16K ROM',
-    '18F25K42 - 20 pins, 2K RAM, 32K ROM',
-    '18F26K42 - 20 pins, 4K RAM, 64K ROM',
-    '18F27K42 - 20 pins, 8K RAM, 128K ROM',
-    Separator(),
-    '18F45K42 - 40 pins, 2K RAM, 32K ROM',
-    '18F46K42 - 40 pins, 4K RAM, 64K ROM',
-    '18F47K42 - 40 pins, 8K RAM, 128K ROM',
-    Separator(),
-    '18F55K42 - 48 pins, 2K RAM, 32K ROM',
-    '18F56K42 - 48 pins, 4K RAM, 64K ROM',
-    '18F57K42 - 48 pins, 8K RAM, 128K ROM',
-]
+processors = {
+    'K42': [
+        '18F24K42 - 20 pins, 1K RAM, 16K ROM',
+        '18F25K42 - 20 pins, 2K RAM, 32K ROM',
+        '18F26K42 - 20 pins, 4K RAM, 64K ROM',
+        '18F27K42 - 20 pins, 8K RAM, 128K ROM',
+        Separator(),
+        '18F45K42 - 40 pins, 2K RAM, 32K ROM',
+        '18F46K42 - 40 pins, 4K RAM, 64K ROM',
+        '18F47K42 - 40 pins, 8K RAM, 128K ROM',
+        Separator(),
+        '18F55K42 - 48 pins, 2K RAM, 32K ROM',
+        '18F56K42 - 48 pins, 4K RAM, 64K ROM',
+        '18F57K42 - 48 pins, 8K RAM, 128K ROM',
+    ],
+    'Q43': [
+        '18F24Q43 - 20 pins, 1K RAM, 16K ROM',
+        '18F25Q43 - 20 pins, 2K RAM, 32K ROM',
+        '18F26Q43 - 20 pins, 4K RAM, 64K ROM',
+        '18F27Q43 - 20 pins, 8K RAM, 128K ROM',
+        Separator(),
+        '18F45Q43 - 40 pins, 2K RAM, 32K ROM',
+        '18F46Q43 - 40 pins, 4K RAM, 64K ROM',
+        '18F47Q43 - 40 pins, 8K RAM, 128K ROM',
+        Separator(),
+        '18F55Q43 - 48 pins, 2K RAM, 32K ROM',
+        '18F56Q43 - 48 pins, 4K RAM, 64K ROM',
+        '18F57Q43 - 48 pins, 8K RAM, 128K ROM',
+    ],
+}
 
 
 programmers = json.loads(open(Path(Path(__file__).parent, "upload.json")).read())
@@ -41,9 +57,15 @@ new_config_file_questions = [
     },
     {
         'type': 'list',
-        'name': 'processor',
-        'message': 'PIC:',
+        'name': 'processor_family',
+        'message': 'processor family:',
         'choices': processors,
+    },
+    {
+        'type': 'list',
+        'name': 'processor',
+        'message': 'processor:',
+        'choices': lambda answers: processors[answers['processor_family']],
         'filter': lambda answer: answer.split(' ')[0],
     },
     {
@@ -52,7 +74,25 @@ new_config_file_questions = [
         'message': 'Programmer:',
         'choices': programmer_list,
     },
+    {
+        'type': 'checkbox',
+        'name': 'options',
+        'message': 'Other options:',
+        'choices': [
+            Separator('> core features'),
+            {'name': 'DEVELOPMENT', 'checked': True},
+            {'name': 'LOGGING_ENABLED', 'checked': True},
+            Separator(' '),
+            Separator('> shell features'),
+            {'name': 'SHELL_ENABLED', 'checked': True},
+            {'name': 'SHELL_HISTORY_ENABLED', 'checked': True},
+            Separator(' '),
+            Separator('> JUDI features '),
+            {'name': 'USB_ENABLED'},
+        ],
+    },
 ]
+
 
 def project_config_wizard():
     file_path = Path("project.yaml")
@@ -67,16 +107,42 @@ def project_config_wizard():
         if not config:
             return
 
-        # add other elements that aren't worth asking the user about
-        config['src_dir'] = 'src'
-        config['build_dir'] = 'build'
-        config['obj_dir'] = 'obj'
-        config['defines'] = ['DEVELOPMENT']
-        config['linker_flags'] = []
+        # copy config into results
+        # this lets us control the order
+        result = {}
+        result['name'] = config['name']
+        result['hw_version'] = '0.0.1'
+        result['sw_version'] = '0.0.1'
+        result['processor'] = config['processor']
+        result['dev_processor'] = config['processor']
+        result['release_processors'] = [config['processor']]
+
+        result['src_dir'] = 'src'
+        result['build_dir'] = 'build'
+        result['obj_dir'] = 'obj'
+        result['defines'] = []
+        result['linker_flags'] = []
+
+        if 'DEVELOPMENT' in config['options']:
+            result['defines'].append('DEVELOPMENT')
+
+        if 'SHELL_ENABLED' in config['options']:
+            result['defines'].append('SHELL_ENABLED')
+            result['linker_flags'].append('-Pshell_cmds')
+
+        if 'SHELL_HISTORY_ENABLED' in config['options']:
+            result['defines'].append('SHELL_HISTORY_ENABLED')
+
+        if 'USB_ENABLED' in config['options']:
+            result['defines'].append('USB_ENABLED')
+
+        if 'LOGGING_ENABLED' in config['options']:
+            result['defines'].append('LOGGING_ENABLED')
 
         # write the config to file
         with open(file_path, 'w') as f:
-            f.write(yaml.dump(config, sort_keys=False))
+            f.write(yaml.dump(result, sort_keys=False))
+
 
 if __name__ == "__main__":
 
