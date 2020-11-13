@@ -108,8 +108,14 @@ def scan_deps(files):
                     name = strip_name(line[len('#include "'): -2])
                     deps[f].append(name)
 
+    checked = []
+
     # walk the dependency tree
     def check_deps(file):
+        if file in checked:
+            return []
+        checked.append(file)
+
         used = [strip_name(file)]
         # print(file, deps[file])
         for dep in deps[file]:
@@ -121,12 +127,28 @@ def scan_deps(files):
 
     used_files = check_deps('src/main.c')
 
-    # special cases
+    # fix special cases
     if 'uart' in used_files:
         used_files.append('uart1')
         used_files.append('uart2')
 
-    return [names[f] for f in set(used_files) if f in names]
+    if 'hash' in used_files:
+        used_files.append('hash_function')
+
+    if 'shell' in used_files:
+        used_files.append('shell_builtin_commands')
+
+    for f in files:
+        if strip_name(f).startswith('sh_'):
+            used_files.append(strip_name(f))
+
+    result = [names[f] for f in set(used_files) if f in names]
+
+    for f in files:
+        if f not in result:
+            print('skipped file:', f)
+
+    return result 
 
 
 def main(project):
