@@ -5,6 +5,8 @@ import sys
 import yaml
 from dotmap import DotMap
 from pathlib import Path
+import subprocess
+
 
 # ------------------------------------------------------------------------------
 
@@ -57,6 +59,12 @@ def xc8(project, files):
 
     # define macro to allow checking compiler version in code
     flag("-D__XC8_CC_C89__")
+
+    # define macro to check the project name
+    flag(f'-D__PRODUCT_NAME__={project.name}')
+
+    # define macro to get which commit this code came from
+    flag(f'-D__PRODUCT_VERSION__={project.git_hash}')
 
     # pass flags to the linker
     [flag(f"-L{link_flag}") for link_flag in project.linker_flags]
@@ -122,8 +130,12 @@ def scan_deps(files):
 
 
 def main(project):
+    # get the short hash and other status info of the repo
+    cmd = 'git describe --always --long --dirty --tags'
+    git_hash = subprocess.run(cmd, stdout=subprocess.PIPE)
+    project.git_hash = git_hash.stdout.decode().replace('\n', '').replace('-', ':')
+
     files = [f.as_posix() for f in Path(project.src_dir).rglob("*.c")]
-    
     deps = scan_deps(files)
 
     if project.compiler == 'xc8-cc':
