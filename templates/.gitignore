@@ -1,0 +1,14 @@
+# ignore output and build artifacts
+build
+obj
+dist
+
+# ignore stupid log file outputs from microchip programmer software
+log.0
+log.1
+log.2
+MPLABXLog.xml*
+log.0.lck
+
+# ignore vscode settings folder
+.vscode
