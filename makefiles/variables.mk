@@ -26,6 +26,7 @@ PROJECT_HEX = $(BUILD_DIR)/$(PROJECT).hex
 
 # The build rules for the hex file
 $(PROJECT_HEX): $(PROJECT_FILES) | $(OBJ_DIR) $(BUILD_DIR)
+	$(VENV_PYTHON) -m cogapp -I$(TOOLCHAIN_DIR)/cogscripts -p "import cogutils as utils" @cogfiles.txt
 	$(VENV_PYTHON) $(TOOLCHAIN_DIR)/scripts/build.py
 
 # **************************************************************************** #

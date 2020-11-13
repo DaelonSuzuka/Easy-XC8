@@ -26,11 +26,6 @@ else
 	rm -rf $(OBJ_DIR)/*
 endif
 
-# Run cog to perform in-line code generation
-.PHONY: cog
-cog: venv
-	$(VENV_PYTHON) -m cogapp -I$(TOOLCHAIN_DIR)/cogscripts -p "import cogutils as utils" @cogfiles.txt
-
 # generate doxygen output
 docs:
 	doxygen Doxyfile
