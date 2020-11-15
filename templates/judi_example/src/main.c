@@ -1,5 +1,6 @@
 #include "config.h"
 #include "system.h"
+#include "ui.h"
 
 /* ************************************************************************** */
 
@@ -28,7 +29,5 @@
 void main(void) {
     startup();
 
-    while (1) {
-        // empty mainloop
-    }
+    ui_mainloop();
 }
