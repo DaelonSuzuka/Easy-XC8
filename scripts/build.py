@@ -153,8 +153,8 @@ def scan_dependencies(project, files):
 def main(project):
     # grab the hash and other status info of the repo
     cmd = 'git describe --always --long --dirty --tags'
-    git_hash = subprocess.run(cmd, stdout=subprocess.PIPE)
-    project.git_hash = git_hash.stdout.decode().replace('\n', '').replace('-', ':')
+    git_hash = subprocess.check_output(cmd, shell=True)
+    project.git_hash = git_hash.decode().replace('\n', '').replace('-', ':')
 
     # resolve project dependencies
     files = [f.as_posix() for f in Path(project.src_dir).rglob("*.c")]
