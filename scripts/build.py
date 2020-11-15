@@ -134,7 +134,7 @@ def scan_dependencies(project, files):
         used_files.append('hash_function')
 
     if 'shell' in used_files:
-        used_files.append('shell_builtin_commands')
+        used_files.extend(walk_dep_tree(names['shell_builtin_commands']))
 
     for f in files:
         if strip_name(f).startswith('sh_'):
@@ -164,7 +164,7 @@ def main(project):
     if project.compiler == 'xc8-cc':
         command = xc8_cc(project)
     else:
-        command = xc8(project, deps)
+        command = xc8(project, files)
 
     # engage
     try:
