@@ -3,8 +3,14 @@
     "c_cpp_properties.json": ".vscode/c_cpp_properties.json",
     "cogfiles.txt": "cogfiles.txt",
     "pins.csv": "pins.csv",
-    "pins.c": "src/pins.c",
-    "pins.h": "src/pins.h",
     ".clang-format": ".clang-format",
-    ".gitignore": ".gitignore"
+    ".gitignore": ".gitignore",
+    "src/pins.c": "src/pins.c",
+    "src/pins.h": "src/pins.h",
+    "src/project_variables.c": "src/project_variables.c",
+    "src/project_variables.h": "src/project_variables.h",
+    "src/system.c": "src/system.c",
+    "src/system.h": "src/system.h",
+    "src/config.h": "src/config.h",
+    "src/main.c": "src/main.c"
 }
