@@ -21,7 +21,7 @@ def copy_file(src, dest):
 def install(template):
     count = 0
     for f in template.rglob('*'):
-        if not Path(f).relative_to(template).exists():
+        if not f.is_dir() and not Path(f).relative_to(template).exists():
             copy_file(f, Path(f).relative_to(template))
             count += 1
 
