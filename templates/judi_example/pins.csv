@@ -1,8 +1,8 @@
 pin, name, tags
 
 # Port A
-A0, 
-A1, 
+A0, BUTTON_ONE_PIN, input gpio button
+A1, BUTTON_TWO_PIN, input gpio button
 A2, 
 A3, 
 A4, 
@@ -11,10 +11,10 @@ A6,
 A7, 
 
 # Port B
-B0, 
-B1, 
-B2, 
-B3, 
+B0, DEBUG_TX_PIN, output pps
+B1, DEBUG_RX_PIN, input pps
+B2, USB_TX_PIN, output pps
+B3, USB_RX_PIN, input pps
 B4, 
 B5, 
 B6, 
