@@ -16,6 +16,12 @@ PROJECT_FILES := $(shell $(PYTHON) $(TOOLCHAIN_DIR)/scripts/find_source_files.py
 # The project config file
 PROJECT_FILES += $(PROJECT_FILE)
 
+# The pin configuration file
+PIN_CONFIG_FILE = pins.csv
+ifneq (,$(wildcard $(PIN_CONFIG_FILE)))
+PROJECT_FILES += $(PIN_CONFIG_FILE)
+endif
+
 # The build script
 PROJECT_FILES += $(TOOLCHAIN_DIR)/scripts/build.py
 
