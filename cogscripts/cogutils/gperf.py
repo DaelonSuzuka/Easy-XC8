@@ -101,7 +101,7 @@ class Gperf:
     def run(self):
         self.create_temp_file()
         result = check_output(self.command(file='strings.gperf'), shell=True).decode()
-        result = result.split('\n')
+        result = [r.strip('\r') for r in result.split('\n')]
         self.remove_temp_file()
 
         if self.remove_line_directives:
