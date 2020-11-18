@@ -58,13 +58,13 @@ new_config_file_questions = [
     {
         'type': 'list',
         'name': 'processor_family',
-        'message': 'processor family:',
+        'message': 'Processor Family:',
         'choices': processors,
     },
     {
         'type': 'list',
         'name': 'processor',
-        'message': 'processor:',
+        'message': 'Processor:',
         'choices': lambda answers: processors[answers['processor_family']],
         'filter': lambda answer: answer.split(' ')[0],
     },
@@ -88,7 +88,7 @@ new_config_file_questions = [
             {'name': 'SHELL_HISTORY_ENABLED', 'checked': True},
             Separator(' '),
             Separator('> JUDI features '),
-            {'name': 'USB_ENABLED'},
+            {'name': 'USB_ENABLED', 'checked': True},
         ],
     },
 ]
@@ -116,6 +116,7 @@ def project_config_wizard():
         result['processor'] = config['processor']
         result['dev_processor'] = config['processor']
         result['release_processors'] = [config['processor']]
+        result['programmer'] = config['programmer']
 
         result['src_dir'] = 'src'
         result['build_dir'] = 'build'
