@@ -26,6 +26,8 @@ def xc8_cc(project, standard="C99"):
     else:
         flag("-D__XC8_CC_C89__")
 
+    # pass flags to compiler
+    [flag(cflag) for cflag in project.compiler_flags]
     # pass flags to the linker
     [flag(f"-Wl,{link_flag}") for link_flag in project.linker_flags]
     # tell the compiler to define preprocessor symbols
