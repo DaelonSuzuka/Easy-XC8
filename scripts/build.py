@@ -131,6 +131,9 @@ def scan_dependencies(project, files):
     if 'uart' in used_files:
         used_files.append('uart1')
         used_files.append('uart2')
+        used_files.append('uart3')
+        used_files.append('uart4')
+        used_files.append('uart5')
 
     if 'hash' in used_files:
         used_files.append('hash_function')
