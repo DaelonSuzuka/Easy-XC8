@@ -74,7 +74,7 @@ static void OS_init(void) {
     config.txPin = PPS_DEBUG_TX_PIN;
     config.rxPin = PPS_DEBUG_RX_PIN;
     create_uart_buffers(debug, config, 64);
-    shell_init(UART_init(config));
+    shell_init(&config);
 
     buttons_init(NUMBER_OF_BUTTONS, buttonFunctions);
     button_isr_init();
@@ -92,7 +92,7 @@ static void application_init(void) {
     config.txPin = PPS_USB_TX_PIN;
     config.rxPin = PPS_USB_RX_PIN;
     create_uart_buffers(usb, config, 64);
-    usb_init(UART_init(config), respond);
+    usb_init(&config, respond);
 }
 
 /* ************************************************************************** */
