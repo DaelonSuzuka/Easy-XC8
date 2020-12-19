@@ -140,6 +140,7 @@ def scan_dependencies(project, files):
 
     if 'shell' in used_files:
         used_files.extend(walk_dep_tree(names['shell_builtin_commands']))
+        used_files.extend(walk_dep_tree(names['all_shell_commands']))
 
     for f in files:
         if strip_name(f).startswith('sh_'):
@@ -161,9 +162,14 @@ def main(project):
     git_hash = subprocess.check_output(cmd, shell=True)
     project.git_hash = git_hash.decode().replace('\n', '').replace('-', ':')
 
-    # resolve project dependencies
     files = [f.as_posix() for f in Path(project.src_dir).rglob("*.c")]
-    deps = scan_dependencies(project, files)
+    
+    # resolve project dependencies, if requested
+    try:
+        if 'USE_DEP_SCANNER' in project.toolchain_options:
+            files = scan_dependencies(project, files)
+    except:
+        pass
 
     # assemble the compile command
     if project.compiler == 'xc8-cc':
