@@ -69,6 +69,10 @@ def GPIO_write_function_signature(pin_name):
     return "void " + "set_" + pin_name + "(bool value)"
 
 
+def tristate_set_function_signature(pin_name):
+    return "void " + "set_tris_" + pin_name + "(bool value)"
+
+
 # ------------------------------------------------------------------------------
 
 def pin_declarations():
@@ -113,6 +117,14 @@ def pin_declarations():
         line("// none")
     for p in gpio_output_pins:
         line(f"extern {GPIO_write_function_signature(p.name)};")
+    line("")
+
+    line("// Tristate set functions")
+    gpio_output_pins = [p for p in gpio_pins if "tristate" in p.tags]
+    if not gpio_output_pins:
+        line("// none")
+    for p in gpio_output_pins:
+        line(f"extern {tristate_set_function_signature(p.name)};")
     line("")
 
     line("// PPS initialization macros")
@@ -177,6 +189,16 @@ def pin_definitions():
     for p in gpio_output_pins:
         line(GPIO_write_function_signature(p.name) + " { ")
         line(f"    LAT{p.pin[0]}bits.LAT{p.pin} = value;" )
+        line("}")
+    line("")
+
+    line("// Tristate set  functions")
+    gpio_output_pins = [p for p in gpio_pins if "tristate" in p.tags]
+    if not gpio_output_pins:
+        line("// none")
+    for p in gpio_output_pins:
+        line(tristate_set_function_signature(p.name) + " { ")
+        line(f"    TRIS{p.pin[0]}bits.TRIS{p.pin} = value;" )
         line("}")
     line("")
 
