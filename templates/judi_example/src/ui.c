@@ -1,6 +1,7 @@
 #include "ui.h"
 #include "os/buttons.h"
 #include "os/logging.h"
+#include "os/serial_port.h"
 #include "os/shell/shell.h"
 #include "os/system_time.h"
 #include "os/usb.h"
@@ -32,7 +33,7 @@ void ui_idle_block(void) {
 
     attempt_hello_world();
 
-    shell_update();
+    shell_update(getch());
 
     usb_update();
 }
