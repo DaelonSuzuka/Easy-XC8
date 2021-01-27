@@ -126,6 +126,11 @@ def scan_dependencies(project, files):
         return used
 
     used_files = walk_dep_tree('src/main.c')
+    used_files.append('ui_func_button')
+    used_files.append('ui_relay_button')
+    used_files.append('ui_submenus')
+    used_files.append('ui_tune_button')
+
 
     # fix special cases
     if 'uart' in used_files:
