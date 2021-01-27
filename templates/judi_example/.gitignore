@@ -12,3 +12,6 @@ log.0.lck
 
 # ignore vscode settings folder
 .vscode
+
+# ignore python byproducts
+__pycache__
