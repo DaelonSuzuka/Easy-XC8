@@ -17,7 +17,7 @@ def skip_comments(lines):
 
 
 def load_pins_from_file():
-    if pinmap_style == 'old:':
+    if pinmap_style == 'old':
         with open('pins.csv', 'r') as f:
             csv.register_dialect('pincsv', skipinitialspace=True)
             reader = csv.DictReader(skip_comments(f), dialect='pincsv')
@@ -25,51 +25,38 @@ def load_pins_from_file():
             pins = [DotMap(r) for r in reader if r['name']]
             for p in pins:
                 p.tags = p.tags.split(" ")
+                p.tags.append('common')
             return pins
 
     else:
         pins = []
-
         for pin, data in pinmap.common.items():
             if data:
-                p = {'pin':pin, 'name':data[0], 'tags':[*data[1], 'common']}
-                pins.append(DotMap(p))
+                pins.append(DotMap({'pin':pin, 'name':data[0], 'tags':[*data[1], 'common']}))
 
         dev_pins = {}
         for pin, data in pinmap.development.items():
             if data:
-                p = {'pin':pin, 'name':data[0], 'tags':data[1]}
-                dev_pins[data[0]] = DotMap(p)
+                dev_pins[data[0]] = DotMap({'pin':pin, 'name':data[0], 'tags':data[1]})
 
         rel_pins = {}
         for pin, data in pinmap.release.items():
             if data:
-                p = {'pin':pin, 'name':data[0], 'tags':data[1]}
-                rel_pins[data[0]] = DotMap(p)
+                rel_pins[data[0]] = DotMap({'pin':pin, 'name':data[0], 'tags':data[1]})
 
         for pin in dev_pins:
             if pin in rel_pins:
-                p = DotMap({**dev_pins[pin]})
-                p.pin = {'d': dev_pins[pin].pin, 'r': rel_pins[pin].pin}
-                p.dpin = dev_pins[pin].pin
-                p.rpin = rel_pins[pin].pin
-                p.tags.append('development')
-                p.tags.append('release')
+                p = {**dev_pins[pin], 'pin':'NA', 'dpin':dev_pins[pin].pin, 'rpin':rel_pins[pin].pin}
+                p.tags.append('development', 'release')
                 pins.append(DotMap(p))
             else:
-                p = DotMap({**dev_pins[pin]})
-                p.pin = {'d': dev_pins[pin].pin, 'r': 'XX'}
-                p.dpin = dev_pins[pin].pin
-                p.rpin = 'XX'
+                p = {**dev_pins[pin], 'pin':'NA', 'dpin':dev_pins[pin].pin, 'rpin':'NA'}
                 p.tags.append('development')
                 pins.append(DotMap(p))
 
         for pin in rel_pins:
             if pin not in dev_pins:
-                p = DotMap({**rel_pins[pin]})
-                p.pin = {'d': rel_pins[pin].pin, 'r': 'XX'}
-                p.dpin = 'XX'
-                p.rpin = rel_pins[pin].pin
+                p = {**rel_pins[pin], 'pin':'NA', 'dpin':'NA', 'rpin':rel_pins[pin].pin}
                 p.tags.append('release')
                 pins.append(DotMap(p))
 
