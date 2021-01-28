@@ -46,18 +46,19 @@ def load_pins_from_file():
 
         for pin in dev_pins:
             if pin in rel_pins:
-                p = {**dev_pins[pin], 'pin':'NA', 'dpin':dev_pins[pin].pin, 'rpin':rel_pins[pin].pin}
-                p.tags.append('development', 'release')
-                pins.append(DotMap(p))
-            else:
-                p = {**dev_pins[pin], 'pin':'NA', 'dpin':dev_pins[pin].pin, 'rpin':'NA'}
+                p = DotMap({**dev_pins[pin], 'pin':'NA', 'dpin':dev_pins[pin].pin, 'rpin':rel_pins[pin].pin})
                 p.tags.append('development')
-                pins.append(DotMap(p))
+                p.tags.append('release')
+                pins.append(p)
+            else:
+                p = DotMap({**dev_pins[pin], 'pin':'NA', 'dpin':dev_pins[pin].pin, 'rpin':'NA'})
+                p.tags.append('development')
+                pins.append(p)
 
         for pin in rel_pins:
             if pin not in dev_pins:
-                p = {**rel_pins[pin], 'pin':'NA', 'dpin':'NA', 'rpin':rel_pins[pin].pin}
+                p = DotMap({**rel_pins[pin], 'pin':'NA', 'dpin':'NA', 'rpin':rel_pins[pin].pin})
                 p.tags.append('release')
-                pins.append(DotMap(p))
+                pins.append(p)
 
         return pins
