@@ -3,10 +3,9 @@
 import os
 import sys
 import json
-import yaml
 import argparse
 from dotmap import DotMap
-from pathlib import Path
+from project import load_project
 
 # ------------------------------------------------------------------------------
 
@@ -49,7 +48,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     arg = parser.add_argument
     try:
-        project = DotMap(yaml.full_load(open("project.yaml").read()))
+        project = load_project()
         source = f"{project['build_dir']}/{project.name}.hex"
         arg("-t", "--target", default=project.processor)
         arg("-s", "--source", default=source)

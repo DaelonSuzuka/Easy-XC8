@@ -1,36 +1,25 @@
 #!/usr/bin/env python3
 
 import os
-import sys
-import yaml
-from dotmap import DotMap
-from build import xc8, xc8_cc
+from pathlib import Path
+from xc8 import Xc8
+from project import load_project
 
 
-def main(project):
-    for processor in project.release_processors:
-        project.processor = processor
+def release():
+    project = load_project()
+    env = project.release
+    sources = [f.as_posix() for f in Path(project.src_dir).rglob("*.c")]
 
-        if project.compiler == 'xc8-cc':
-            command = xc8_cc(project)
-        else:
-            command = xc8(project)
+    command = Xc8(project, env, sources)
+    command.run()
 
-        try:
-            os.system(command)
-        except KeyboardInterrupt:
-            sys.exit(1)
-        
-        hexfile = f"{project.build_dir}/{project.name}"
-        old_name = f'{hexfile}.hex'
-        new_name = f'{hexfile}_v{project.sw_version}_{processor}.hex'
-
-        os.rename(old_name, new_name)
-
-    sys.exit(0)
+    # rename the hex file 
+    hexfile = f"{project.build_dir}/{project.name}"
+    old_name = f'{hexfile}.hex'
+    new_name = f'{hexfile}_v{project.sw_version}_{env.processor}.hex'
+    os.rename(old_name, new_name)
 
 
 if __name__ == "__main__":
-    project = DotMap(yaml.full_load(open("project.yaml").read()))
-
-    main(project)
+    release()

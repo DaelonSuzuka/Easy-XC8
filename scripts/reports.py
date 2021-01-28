@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
-import yaml
-from dotmap import DotMap
+
+from project import load_project
 
 
 # ------------------------------------------------------------------------------
@@ -83,6 +83,6 @@ def main(project):
 
 
 if __name__ == "__main__":
-    project = DotMap(yaml.full_load(open("project.yaml").read()))
+    project = load_project()
 
     main(project)
