@@ -49,8 +49,8 @@ if __name__ == "__main__":
     arg = parser.add_argument
     try:
         project = load_project()
-        source = f"{project['build_dir']}/{project.name}.hex"
-        arg("-t", "--target", default=project.processor)
+        source = f"{project.build_dir}/{project.name}.hex"
+        arg("-t", "--target", default=project.development.processor)
         arg("-s", "--source", default=source)
         arg("-p", "--programmer", default=project.programmer)
     except:
