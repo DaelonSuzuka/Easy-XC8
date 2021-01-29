@@ -22,6 +22,12 @@ ifneq (,$(wildcard $(PIN_CONFIG_FILE)))
 PROJECT_FILES += $(PIN_CONFIG_FILE)
 endif
 
+# new pin config file
+NEW_PIN_CONFIG_FILE = pinmap.py
+ifneq (,$(wildcard $(NEW_PIN_CONFIG_FILE)))
+PROJECT_FILES += $(NEW_PIN_CONFIG_FILE)
+endif
+
 # The build script
 PROJECT_FILES += $(TOOLCHAIN_DIR)/scripts/build.py
 
