@@ -10,6 +10,7 @@ upload: venv $(PROJECT_HEX)
 
 # Build the release binaries
 release: venv
+	$(VENV_PYTHON) -m cogapp --verbosity=1 -I$(TOOLCHAIN_DIR)/cogscripts -p "import cogutils as utils" @cogfiles.txt
 	$(VENV_PYTHON) $(TOOLCHAIN_DIR)/scripts/release.py
 
 # Scrape the compiler outputs for data about the build

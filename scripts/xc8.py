@@ -1,5 +1,5 @@
 from pathlib import Path
-import os
+import subprocess
 from dependencies import scan_dependencies
 
 
@@ -50,4 +50,4 @@ class Xc8:
             flag(s)
 
     def run(self):
-        os.system(" ".join(self.command))
+        return subprocess.call(" ".join(self.command))

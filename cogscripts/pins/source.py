@@ -1,5 +1,6 @@
 from .loader import load_pins_from_file
 from .functions import *
+from dotmap import DotMap
 
 
 # *************************************************************************** #
@@ -90,11 +91,17 @@ def pins_init():
     for p in pins:
         line(f"// {p.name}")
 
-        if p.pin != 'E3': # RE3 doesn't have a tris bit
-            if "input" in p.tags:
-                if_dev(line, p, 'TRIS{port}bits.TRIS{pin} = 1;')
-            elif "output" in p.tags:
-                if_dev(line, p, 'TRIS{port}bits.TRIS{pin} = 0;')
+        # if p.pin != 'E3': # RE3 doesn't have a tris bit
+        if "input" in p.tags:
+            p2 = DotMap(**p)
+            if p2.rpin == 'E3': 
+                p2.tags.remove('release')
+            if p2.dpin == 'E3':
+                p2.tags.remove('development')
+        
+            if_dev(line, p2, 'TRIS{port}bits.TRIS{pin} = 1;')
+        elif "output" in p.tags:
+            if_dev(line, p, 'TRIS{port}bits.TRIS{pin} = 0;')
 
         if "analog" in p.tags:
             if_dev(line, p, 'ANSEL{port}bits.ANSEL{pin} = 1;')
