@@ -35,8 +35,8 @@ def scan_dependencies(project, env, files):
 
     used_files = walk_dep_tree('src/main.c')
 
-    for file in project.force_include:
-        used_files.append(file.rstrip('.c'))
+    for f in env.force_include:
+        used_files.append(strip_name(f))
 
     # fix special cases
     if 'uart' in used_files:
