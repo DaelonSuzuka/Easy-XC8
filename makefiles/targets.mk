@@ -13,6 +13,10 @@ release: venv
 	$(VENV_PYTHON) -m cogapp --verbosity=1 -I$(TOOLCHAIN_DIR)/cogscripts -p "import cogutils as utils" @cogfiles.txt
 	$(VENV_PYTHON) $(TOOLCHAIN_DIR)/scripts/release.py
 
+# program the release hex to a chip
+program: venv
+	$(VENV_PYTHON) $(TOOLCHAIN_DIR)/scripts/program.py
+
 # Scrape the compiler outputs for data about the build
 reports: venv $(PROJECT_HEX) 
 	$(VENV_PYTHON) $(TOOLCHAIN_DIR)/scripts/reports.py
