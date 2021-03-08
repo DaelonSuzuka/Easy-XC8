@@ -1,5 +1,5 @@
 #include "messages.h"
-#include "hash.h"
+#include "os/hash.h"
 #include "os/json/json_print.h"
 #include "os/serial_port.h"
 #include "system.h"

@@ -1,4 +1,4 @@
 src/pins.h -r
 src/pins.c -r
-src/usb/hash.h -r
+src/os/hash.h -r
 src/os/shell/shell_command_registration.h -r
