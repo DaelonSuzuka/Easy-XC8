@@ -50,4 +50,4 @@ class Xc8:
             flag(s)
 
     def run(self):
-        return subprocess.call(" ".join(self.command))
+        return subprocess.call(" ".join(self.command), shell=True)
