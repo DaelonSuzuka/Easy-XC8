@@ -49,10 +49,6 @@ def scan_dependencies(project, env, files):
     if 'hash' in used_files:
         used_files.append('hash_function')
 
-    if 'shell' in used_files:
-        used_files.extend(walk_dep_tree(names['shell_builtin_commands']))
-        used_files.extend(walk_dep_tree(names['all_shell_commands']))
-
     for f in files:
         if strip_name(f).startswith('sh_'):
             used_files.append(strip_name(f))
