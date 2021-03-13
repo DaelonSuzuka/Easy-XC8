@@ -18,7 +18,7 @@ program: venv
 	$(VENV_PYTHON) $(TOOLCHAIN_DIR)/scripts/program.py
 
 # Scrape the compiler outputs for data about the build
-reports: venv $(PROJECT_HEX) 
+reports: venv
 	$(VENV_PYTHON) $(TOOLCHAIN_DIR)/scripts/reports.py
 
 # Remove the compiler outputs
