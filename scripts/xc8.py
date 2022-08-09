@@ -32,6 +32,7 @@ class Xc8:
             '_XC_H_', # silence the header file warning telling me to include xc.h
             f'__PRODUCT_NAME__={project.name}',
             f'__PRODUCT_VERSION__={project.git_hash}',
+            f'__PROCESSOR__={env.processor}',
             *env.defines,
         ]
         for symbol in defines:
