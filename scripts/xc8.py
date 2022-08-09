@@ -29,6 +29,7 @@ class Xc8:
         # symbol definitions
         defines = [
             '__XC8_C89__',
+            '_XC_H_', # silence the header file warning telling me to include xc.h
             f'__PRODUCT_NAME__={project.name}',
             f'__PRODUCT_VERSION__={project.git_hash}',
             *env.defines,
