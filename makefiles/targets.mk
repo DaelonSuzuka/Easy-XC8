@@ -5,7 +5,7 @@
 compile: venv $(PROJECT_HEX)
 
 # Upload the hex file to the target device
-upload: venv $(PROJECT_HEX) 
+upload: venv
 	$(VENV_PYTHON) $(TOOLCHAIN_DIR)/scripts/upload.py
 
 # Build the release binaries
