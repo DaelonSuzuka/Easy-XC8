@@ -2,6 +2,7 @@
 #define _MESSAGES_H_
 
 #include "os/json/json_node.h"
+#include "os/judi/judi.h"
 #include "os/judi/judi_messages.h"
 #include "os/usb_port.h"
 

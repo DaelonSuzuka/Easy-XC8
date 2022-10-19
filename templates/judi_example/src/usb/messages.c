@@ -1,6 +1,8 @@
 #include "messages.h"
 #include "os/json/json_print.h"
 #include "os/judi/hash.h"
+#include "os/judi/judi.h"
+#include "os/judi/message_builder.h"
 #include "os/serial_port.h"
 #include "system.h"
 #include <stdint.h>

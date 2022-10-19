@@ -5,7 +5,7 @@
 #include "os/shell/shell.h"
 #include "os/stopwatch.h"
 #include "os/system_time.h"
-#include "os/usb.h"
+#include "os/judi/judi.h"
 #include "peripherals/device_information.h"
 #include "peripherals/interrupt.h"
 #include "peripherals/oscillator.h"
@@ -95,7 +95,9 @@ static void application_init(void) {
     config.txPin = PPS_USB_TX_PIN;
     config.rxPin = PPS_USB_RX_PIN;
     create_uart_buffers(usb, config, 64);
-    usb_init(&config, respond);
+    usb_port_init(&config);
+
+    judi_init(respond);
 }
 
 /* ************************************************************************** */

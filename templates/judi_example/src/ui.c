@@ -4,7 +4,8 @@
 #include "os/serial_port.h"
 #include "os/shell/shell.h"
 #include "os/system_time.h"
-#include "os/usb.h"
+#include "os/usb_port.h"
+#include "os/judi/judi.h"
 #include "pins.h"
 static uint8_t LOG_LEVEL = L_SILENT;
 
@@ -35,7 +36,7 @@ void ui_idle_block(void) {
 
     shell_update(getch());
 
-    usb_update();
+    judi_update(usb_getch());
 }
 
 /* ************************************************************************** */

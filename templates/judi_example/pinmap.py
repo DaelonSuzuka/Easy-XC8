@@ -33,9 +33,9 @@ common = {
 
     # port B
     'B0': ('DEBUG_TX_PIN', Pin.uart_tx),
-    'B1': ('DEBUG_RX_PIN', Pin.uart_tx),
+    'B1': ('DEBUG_RX_PIN', Pin.uart_rx),
     'B2': ('USB_TX_PIN', Pin.uart_tx),
-    'B3': ('USB_RX_PIN', Pin.uart_tx),
+    'B3': ('USB_RX_PIN', Pin.uart_rx),
     'B4': None,
     'B5': None,
     'B6': None,
@@ -84,10 +84,10 @@ common = {
 
 
 development = {
-    **common,
+    # no difference
 }
 
 
 release = {
-    **common,
+    # no difference
 }
