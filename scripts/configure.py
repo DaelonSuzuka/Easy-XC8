@@ -1,7 +1,9 @@
 import yaml
 import json
 from pathlib import Path
-from PyInquirer import prompt, print_json, Separator
+from InquirerPy import prompt
+from InquirerPy.base.control import Choice
+from InquirerPy.separator import Separator
 
 
 processors = {
@@ -80,15 +82,15 @@ new_config_file_questions = [
         'message': 'Other options:',
         'choices': [
             Separator('> core features'),
-            {'name': 'DEVELOPMENT', 'checked': True},
-            {'name': 'LOGGING_ENABLED', 'checked': True},
+            Choice("DEVELOPMENT", name="DEVELOPMENT", enabled=True),
+            Choice("LOGGING_ENABLED", name="LOGGING_ENABLED", enabled=True),
             Separator(' '),
             Separator('> shell features'),
-            {'name': 'SHELL_ENABLED', 'checked': True},
-            {'name': 'SHELL_HISTORY_ENABLED', 'checked': True},
+            Choice("SHELL_ENABLED", name="SHELL_ENABLED", enabled=True),
+            Choice("SHELL_HISTORY_ENABLED", name="SHELL_HISTORY_ENABLED", enabled=True),
             Separator(' '),
             Separator('> JUDI features '),
-            {'name': 'USB_ENABLED', 'checked': True},
+            Choice("USB_ENABLED", name="USB_ENABLED", enabled=False),
         ],
     },
 ]
