@@ -34,6 +34,7 @@ const char productVersion[] = xstr(__PRODUCT_VERSION__);
 
 // compilation information
 const uint16_t xc8Version = __XC8_VERSION;
+const char processorModel[] = xstr(__PROCESSOR__);
 const char compileDate[] = __DATE__;
 const char compileTime[] = __TIME__;
 

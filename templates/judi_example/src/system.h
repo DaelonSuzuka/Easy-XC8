@@ -17,6 +17,7 @@ extern const char productVersion[];
 
 // compilation information
 extern const uint16_t xc8Version;
+extern const char processorModel[];
 extern const char compileDate[];
 extern const char compileTime[];
 
