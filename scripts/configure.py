@@ -115,32 +115,40 @@ def project_config_wizard():
         result['name'] = config['name']
         result['hw_version'] = '0.0.1'
         result['sw_version'] = '0.0.1'
-        result['processor'] = config['processor']
-        result['dev_processor'] = config['processor']
-        result['release_processors'] = [config['processor']]
-        result['programmer'] = config['programmer']
 
-        result['src_dir'] = 'src'
-        result['build_dir'] = 'build'
-        result['obj_dir'] = 'obj'
-        result['defines'] = []
-        result['linker_flags'] = []
+        result['build_settings'] = {
+            'toolchain_options': [
+                'USE_DEP_SCANNER',
+            ],
+            'development': {
+                'processor': config['processor'],
+                'programmer': config['programmer'],
+                'defines': [
+                    'DEVELOPMENT',
+                ],
+            },
+            'release': {
+                'processor': config['processor'],
+                'programmer': config['programmer'],
+                'defines': [
+                ],
+            },
+        }
 
-        if 'DEVELOPMENT' in config['options']:
-            result['defines'].append('DEVELOPMENT')
+        dev = result['build_settings']['development']['defines'].append
+        rel = result['build_settings']['release']['defines'].append
 
         if 'SHELL_ENABLED' in config['options']:
-            result['defines'].append('SHELL_ENABLED')
-            result['linker_flags'].append('-Pshell_cmds')
+            dev('SHELL_ENABLED')
 
         if 'SHELL_HISTORY_ENABLED' in config['options']:
-            result['defines'].append('SHELL_HISTORY_ENABLED')
+            dev('SHELL_HISTORY_ENABLED')
 
         if 'USB_ENABLED' in config['options']:
-            result['defines'].append('USB_ENABLED')
+            dev('USB_ENABLED')
 
         if 'LOGGING_ENABLED' in config['options']:
-            result['defines'].append('LOGGING_ENABLED')
+            dev('LOGGING_ENABLED')
 
         # write the config to file
         with open(file_path, 'w') as f:
