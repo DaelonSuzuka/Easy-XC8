@@ -1,2 +1,3 @@
 src/pins.h -r
 src/pins.c -r
+src/os/judi/hash.h -r

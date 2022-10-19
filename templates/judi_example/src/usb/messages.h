@@ -1,9 +1,8 @@
 #ifndef _MESSAGES_H_
 #define _MESSAGES_H_
 
-#include "os/json/json_messages.h"
 #include "os/json/json_node.h"
-#include "os/usb.h"
+#include "os/judi/judi_messages.h"
 #include "os/usb_port.h"
 
 /* ************************************************************************** */
