@@ -96,11 +96,11 @@ def pin_declarations():
 
     gpio_read_functions(line, pins)
     line("")
-    button_stuff(line, pins)
-    line("")
     gpio_write_functions(line, pins)
     line("")
     gpio_direction_functions(line, pins)
+    line("")
+    button_stuff(line, pins)
     line("")
     pps_pin_macros(line, pins)
     line("")
