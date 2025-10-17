@@ -69,7 +69,7 @@ def load_project():
     project = fix_project(project)
     project['git_hash'] = get_commit_hash()
     project['hexname'] = f"{project['build_dir']}/{project['name']}.hex"
-    return DotMap(project)
+    return project
 
 
 if __name__ == "__main__":

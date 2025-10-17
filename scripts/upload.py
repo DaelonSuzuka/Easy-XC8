@@ -14,11 +14,11 @@ def assemble_upload_command(programmer, args):
     command = []
     add = command.append
 
-    add(programmer.command)
-    add(programmer.target + args.target)
-    add(programmer.source + args.source)
+    add(programmer['command'])
+    add(programmer['target'] + args.target)
+    add(programmer['source'] + args.source)
 
-    for flag in programmer.flags:
+    for flag in programmer['flags']:
         add(flag)
 
     return " ".join(command)
@@ -30,7 +30,7 @@ def main(programmer, args):
     exit_code = os.system(command)
 
     # clean up temp files
-    for f in programmer.garbage:
+    for f in programmer['garbage']:
         try:
             os.remove(f)
         except:
@@ -43,20 +43,20 @@ if __name__ == "__main__":
     current_dir = os.path.dirname(__file__)
     file_path = os.path.join(current_dir, "upload.json")
 
-    programmers = DotMap(json.loads(open(file_path).read()))
+    programmers = json.loads(open(file_path).read())
 
     parser = argparse.ArgumentParser()
     arg = parser.add_argument
-    try:
-        project = load_project()
-        source = f"{project.build_dir}/{project.name}.hex"
-        arg("-t", "--target", default=project.development.processor)
-        arg("-s", "--source", default=source)
-        arg("-p", "--programmer", default=project.programmer)
-    except:
-        arg("-t", "--target", required=True)
-        arg("-s", "--source", required=True)
-        arg("-p", "--programmer", default=programmers.default)
+    # try:
+    project = load_project()
+    source = f"{project['build_dir']}/{project['name']}.hex"
+    arg("-t", "--target", default=project['development']['processor'])
+    arg("-s", "--source", default=source)
+    arg("-p", "--programmer", default=project['development']['programmer'])
+    # except:
+    #     arg("-t", "--target", required=True)
+    #     arg("-s", "--source", required=True)
+    #     arg("-p", "--programmer", default=programmers['default'])
 
     args = parser.parse_args()
 
