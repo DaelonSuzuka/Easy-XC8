@@ -21,6 +21,11 @@ def release():
         old_name = f'{hexfile}.hex'
         new_name = f'{hexfile}_v{project.sw_version}_{env.processor}.hex'
         Path(old_name).replace(new_name)
+        
+        # add metadata to the hex file
+        contents = Path(new_name).read_text()
+        contents = f';{env.processor}\n;{project.name}v{project.sw_version}\n;{project.git_hash}\n\n{contents}'
+        Path(new_name).write_text(contents)
 
     sys.exit(result)
 
