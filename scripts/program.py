@@ -13,7 +13,7 @@ programmers = DotMap(json.loads(open(file_path).read()))
 
 
 def program():
-    project = load_project()
+    project = DotMap(load_project())
     env = project.release
 
     hexfile = f"{project.build_dir}/{project.name}"
