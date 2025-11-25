@@ -4,10 +4,11 @@ import sys
 from pathlib import Path
 from xc8 import Xc8
 from project import load_project
+from dotmap import DotMap
 
 
 def release():
-    project = load_project()
+    project = DotMap(load_project())
     env = project.release
     sources = [f.as_posix() for f in Path(project.src_dir).rglob("*.c")]
 
