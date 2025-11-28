@@ -15,11 +15,11 @@ def compile():
     command = Xc8(project, env, sources)
     result = command.run()
 
-    hexfile = f'{project.build_dir}/{project.name}.hex'
-    # add metadata to the hex file
-    contents = Path(hexfile).read_text()
-    contents = f';{env.processor}\n;{project.name}v{project.sw_version}\n;{project.git_hash}\n\n{contents}'
-    Path(hexfile).write_text(contents)
+    # hexfile = f'{project.build_dir}/{project.name}.hex'
+    # # add metadata to the hex file
+    # contents = Path(hexfile).read_text()
+    # contents = f';{env.processor}\n;{project.name}v{project.sw_version}\n;{project.git_hash}\n\n{contents}'
+    # Path(hexfile).write_text(contents)
 
     sys.exit(result)
 
