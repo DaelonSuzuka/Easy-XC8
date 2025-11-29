@@ -24,7 +24,7 @@ def release():
         
         # add metadata to the hex file
         contents = Path(new_name).read_text()
-        contents = f';{env.processor}\n;{project.name}v{project.sw_version}\n;{project.git_hash}\n\n{contents}'
+        contents = f';PIC{env.processor}\n{contents}'
         Path(new_name).write_text(contents)
 
     sys.exit(result)
