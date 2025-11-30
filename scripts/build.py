@@ -13,6 +13,7 @@ def compile():
     env = project.development
     sources = [f.as_posix() for f in Path(project.src_dir).rglob('*.c')]
 
+    # command = Xc8(project, env, sources)
     command = Xc8CC(project, env, sources)
     result = command.run()
 
