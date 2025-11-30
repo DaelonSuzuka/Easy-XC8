@@ -3,6 +3,7 @@
 import sys
 from pathlib import Path
 from xc8 import Xc8
+from xc8_cc import Xc8CC
 from project import load_project
 from dotmap import DotMap
 
@@ -12,7 +13,7 @@ def compile():
     env = project.development
     sources = [f.as_posix() for f in Path(project.src_dir).rglob('*.c')]
 
-    command = Xc8(project, env, sources)
+    command = Xc8CC(project, env, sources)
     result = command.run()
 
     # hexfile = f'{project.build_dir}/{project.name}.hex'

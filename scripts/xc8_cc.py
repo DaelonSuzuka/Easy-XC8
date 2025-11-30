@@ -1,40 +1,60 @@
 from pathlib import Path
+import subprocess
+from dependencies import scan_dependencies
 
 
-def xc8_cc(project, standard="C99"):
-    """Builds the firmware using xc8-cc command in c99 mode."""
-    command = ["xc8-cc"]
-    flag = command.append
+class Xc8CC:
+    def __init__(self, project, env, sources, standard='C99'):
+        self.command = ['xc8-cc']
+        # self.command = ['C:/Microchip/xc8/v3.10/bin/xc8-cc']
+        flag = self.command.append
 
-    flag(f"-mcpu={project.processor}")
-    flag(f"-std={standard}")
-    flag(f"-o {project.build_dir}/{project.name}.hex")
+        flag(f'-mcpu={env.processor}')
+        # flag(f'-mdfp="C:/Microchip/packs/Microchip.PIC18F-K_DFP.1.15.303/xc8"')
 
-    # define macros to allow checking compiler version in code
-    if standard == "C99":
-        flag("-D__XC8_CC_C99__")
-    else:
-        flag("-D__XC8_CC_C89__")
+        flag(f'-std={standard}')
+        flag(f'-o {project.build_dir}/{project.name}.hex')
 
-    # pass flags to compiler
-    [flag(cflag) for cflag in project.compiler_flags]
-    # pass flags to the linker
-    [flag(f"-Wl,{link_flag}") for link_flag in project.linker_flags]
-    # tell the compiler to define preprocessor symbols
-    [flag(f"-D{symbol}") for symbol in project.defines]
-    # specify include directories
-    flag(f"-I{project.src_dir}")
-    [flag(f"-I{d.as_posix()}") for d in Path(project.src_dir).rglob("*") if d.is_dir()]
+        flag('-mstack=hybrid:auto:auto:auto')  # specify stack parameters
 
-    flag("-mstack=hybrid:auto:auto:auto")  # specify stack parameters
+        flag('-O2')  # optimize for size
 
-    # this MUST be last
-    # specify "*.c" as compilation targets
-    files = [f.as_posix() for f in Path(project.src_dir).rglob("*.c")]
-    # move main.c to the front of the list
-    main = [f for f in files if "main.c" in f][0]
-    files.insert(0, files.pop(files.index(main)))
+        # define macros to allow checking compiler version in code
+        if standard == 'C99':
+            flag('-D__XC8_CC_C99__')
+        else:
+            flag('-D__XC8_CC_C89__')
 
-    [flag(f) for f in files]
+        # symbol definitions
+        defines = [
+            # '__XC8_C89__',
+            '_XC_H_',  # silence the header file warning telling me to include xc.h
+            f'__PRODUCT_NAME__={project.name}',
+            f'__PRODUCT_VERSION__={project.git_hash}',
+            f'__PROCESSOR__={env.processor}',
+            *env.defines,
+        ]
+        for symbol in defines:
+            flag(f'-D{symbol}')
 
-    return " ".join(command)
+        # # pass flags to compiler
+        # [flag(cflag) for cflag in project.compiler_flags]
+        # # pass flags to the linker
+        # [flag(f'-Wl,{link_flag}') for link_flag in project.linker_flags]
+
+        # include paths
+        includes = [
+            project.src_dir,
+            *[d.as_posix() for d in Path(project.src_dir).rglob('*') if d.is_dir()],
+        ]
+        for path in includes:
+            flag(f'-I{path}')
+
+        # source files
+        sources = scan_dependencies(project, env, sources)
+        for s in sources:
+            flag(s)
+
+    def run(self):
+        cmd = ' '.join(self.command)
+        return subprocess.call(cmd, shell=True)
