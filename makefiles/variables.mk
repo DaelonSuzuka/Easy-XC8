@@ -29,7 +29,7 @@ PROJECT_FILES += $(NEW_PIN_CONFIG_FILE)
 endif
 
 # The build script
-PROJECT_FILES += $(TOOLCHAIN_DIR)/scripts/build.py
+PROJECT_FILES += $(TOOLCHAIN_DIR)/scripts/compile.py
 
 # **************************************************************************** #
 
@@ -39,7 +39,7 @@ PROJECT_HEX = $(BUILD_DIR)/$(PROJECT).hex
 # The build rules for the hex file
 $(PROJECT_HEX): $(PROJECT_FILES) | $(OBJ_DIR) $(BUILD_DIR)
 	$(VENV_PYTHON) -m cogapp --verbosity=1 -I$(TOOLCHAIN_DIR)/cogscripts -p "import cogutils as utils" @cogfiles.txt
-	$(VENV_PYTHON) $(TOOLCHAIN_DIR)/scripts/build.py
+	$(VENV_PYTHON) $(TOOLCHAIN_DIR)/scripts/compile.py
 
 # **************************************************************************** #
 # creates output directories if they're missing

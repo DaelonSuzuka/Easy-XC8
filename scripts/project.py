@@ -1,5 +1,5 @@
 import yaml
-from dotmap import DotMap
+import json
 import subprocess
 
 
@@ -27,9 +27,12 @@ def fix_project(proj):
     set_default('src_dir', 'src')
     set_default('obj_dir', 'obj')
     set_default('build_dir', 'build')
+    set_default('compiler', 'legacy') # legacy or clang
+    set_default('skip_rules', [])
 
     # fix dev and release environments
     pop_list = set()
+
     def fix_env(env):
         def inherit(key, default=None):
             pop_list.add(key)
@@ -47,7 +50,9 @@ def fix_project(proj):
 
         inherit('toolchain_options', [])
         inherit('defines', [])
-        inherit('force_include', [])
+        inherit('skip_rules', [])
+        inherit('compiler', 'legacy')
+        inherit('standard', 'c89')
 
     # make sure the environment definitions exist
     set_default('development', {})
@@ -65,13 +70,13 @@ def fix_project(proj):
 
 
 def load_project():
-    project = yaml.full_load(open("project.yaml").read())
+    project = yaml.full_load(open('project.yaml').read())
     project = fix_project(project)
     project['git_hash'] = get_commit_hash()
-    project['hexname'] = f"{project['build_dir']}/{project['name']}.hex"
+    project['hexname'] = f'{project["build_dir"]}/{project["name"]}.hex'
     return project
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     project = load_project()
-    print(project)
+    print(json.dumps(project, indent=4, sort_keys=True))

@@ -34,3 +34,7 @@ endif
 # run cppcheck
 lint: venv
 	$(VENV_PYTHON) $(TOOLCHAIN_DIR)/scripts/cppcheck.py	
+
+# 
+project:
+	$(VENV_PYTHON) $(TOOLCHAIN_DIR)/scripts/project.py	

@@ -1,10 +1,11 @@
-from pathlib import Path
 import subprocess
-from dependencies import scan_dependencies
+from pathlib import Path
+
+from skip import apply_skip_rules
 
 
 class Xc8CC:
-    def __init__(self, project, env, sources, standard='C99'):
+    def __init__(self, project, env, sources):
         self.command = ['xc8-cc']
         # self.command = ['C:/Microchip/xc8/v3.10/bin/xc8-cc']
         flag = self.command.append
@@ -12,22 +13,16 @@ class Xc8CC:
         flag(f'-mcpu={env.processor}')
         # flag(f'-mdfp="C:/Microchip/packs/Microchip.PIC18F-K_DFP.1.15.303/xc8"')
 
-        flag(f'-std={standard}')
+        flag(f'-std={env.standard}')
         flag(f'-o {project.build_dir}/{project.name}.hex')
 
         flag('-mstack=hybrid:auto:auto:auto')  # specify stack parameters
 
         flag('-O2')  # optimize for size
 
-        # define macros to allow checking compiler version in code
-        if standard == 'C99':
-            flag('-D__XC8_CC_C99__')
-        else:
-            flag('-D__XC8_CC_C89__')
-
         # symbol definitions
         defines = [
-            # '__XC8_C89__',
+            f'__XC8_CC_{env.standard.upper()}__',
             '_XC_H_',  # silence the header file warning telling me to include xc.h
             f'__PRODUCT_NAME__={project.name}',
             f'__PRODUCT_VERSION__={project.git_hash}',
@@ -51,7 +46,7 @@ class Xc8CC:
             flag(f'-I{path}')
 
         # source files
-        sources = scan_dependencies(project, env, sources)
+        sources = apply_skip_rules(project, env, sources)
         for s in sources:
             flag(s)
 
