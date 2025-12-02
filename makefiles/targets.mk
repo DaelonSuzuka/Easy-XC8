@@ -30,10 +30,6 @@ else
 	rm -rf $(BUILD_DIR)/*
 	rm -rf $(OBJ_DIR)/*
 endif
-
-# generate doxygen output
-docs:
-	doxygen Doxyfile
 	
 # run cppcheck
 lint: venv

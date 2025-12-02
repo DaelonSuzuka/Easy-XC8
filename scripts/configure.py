@@ -1,7 +1,7 @@
 import yaml
 import json
 from pathlib import Path
-from InquirerPy import prompt
+from InquirerPy.resolver import prompt
 from InquirerPy.base.control import Choice
 from InquirerPy.separator import Separator
 
