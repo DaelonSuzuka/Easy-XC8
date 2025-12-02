@@ -2,6 +2,7 @@
 
 
 from project import load_project
+from dotmap import DotMap
 
 
 # ------------------------------------------------------------------------------
@@ -83,6 +84,6 @@ def main(project):
 
 
 if __name__ == "__main__":
-    project = load_project()
+    project = DotMap(load_project())
 
     main(project)
