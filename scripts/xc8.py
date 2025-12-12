@@ -13,6 +13,9 @@ class Xc8:
         flag(f'-O{project.build_dir}/{project.name}')  # location of final results
         flag(f'--OBJDIR={project.obj_dir}')  # intermediate file directory
 
+        flag('-M')  # generate map file
+        flag('--ASMLIST')  # list assembly files
+
         flag('--STACK=hybrid:auto:auto:auto')  # specify stack parameters
         flag('--FILL=0xffff')  # fill empty space in the hexfile with a pattern
         flag('--FLOAT=32')  # set floats to 32 bits
