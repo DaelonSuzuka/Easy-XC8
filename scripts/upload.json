@@ -69,6 +69,33 @@
             "MPLABXLog.xml.lck"
         ]
     },
+    "Pickit5-linux": {
+        "command": "ipecmd.sh",
+        "target": "-P",
+        "source": "-F",
+        "flags": [
+            "-TPPK5",
+            "-M"
+        ],
+        "garbage": [
+            "log.0",
+            "log.1",
+            "log.2",
+            "MPLABXLog.xml",
+            "MPLABXLog.xml.1",
+            "MPLABXLog.xml.2",
+            "MPLABXLog.xml.3",
+            "MPLABXLog.xml.4",
+            "MPLABXLog.xml.5",
+            "MPLABXLog.xml.6",
+            "MPLABXLog.xml.7",
+            "MPLABXLog.xml.8",
+            "MPLABXLog.xml.9",
+            "MPLABXLog.xml.10",
+            "MPLABXLog.xml.11",
+            "MPLABXLog.xml.lck"
+        ]
+    },
     "ICD-U80-win": {
         "command": "ccsloader",
         "target": "-DEVICE=PIC",
