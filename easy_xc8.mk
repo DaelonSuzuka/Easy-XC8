@@ -7,6 +7,7 @@ MAKEFLAGS += --warn-undefined-variables
 .ONESHELL:
 
 # select shell 
+OS ?=
 ifeq ($(OS),Windows_NT)
 SHELL = cmd
 else

@@ -2,6 +2,7 @@
 # python venv settings
 VENV_NAME := .venv
 
+OS ?=
 ifeq ($(OS),Windows_NT)
 	VENV_DIR := $(TOOLCHAIN_DIR)\$(VENV_NAME)
 	VENV := $(VENV_DIR)\Scripts

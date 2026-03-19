@@ -1,6 +1,8 @@
 # **************************************************************************** #
 # Primary targets
 	
+OS ?=
+
 # Build the project
 compile: venv $(PROJECT_HEX)
 
