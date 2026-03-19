@@ -6,6 +6,7 @@ import json
 import argparse
 from dotmap import DotMap
 from project import load_project
+from pathlib import Path
 
 # ------------------------------------------------------------------------------
 
@@ -16,7 +17,9 @@ def assemble_upload_command(programmer, args):
 
     add(programmer['command'])
     add(programmer['target'] + args.target)
-    add(programmer['source'] + args.source)
+    
+    # ipecmd on linux requires absolute path
+    add(programmer['source'] + str(Path(args.source).absolute()))
 
     for flag in programmer['flags']:
         add(flag)
