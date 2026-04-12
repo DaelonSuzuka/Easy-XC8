@@ -161,3 +161,28 @@ Uses `uv` for Python dependency management. Scripts run in the toolchain's virtu
 | `xc8.py` | Legacy compiler wrapper |
 | `xc8_cc.py` | Clang compiler wrapper |
 | `configure.py` | Interactive project.yaml wizard |
+
+## Static Analysis
+
+Run `cppcheck` for static analysis:
+
+```bash
+make lint
+```
+
+The linter checks:
+- C89 standard compliance
+- All `#ifdef` configurations
+- AVR8 platform (closest to PIC18)
+- Unused functions, memory leaks, null pointers
+
+Inline suppressions are supported:
+
+```c
+// cppcheck-suppress memoryLeak
+buffer = malloc(256);  // Intentionally never freed
+```
+
+See [reports.md](reports.md) for post-build memory analysis.
+
+## Further Documentation
