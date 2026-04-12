@@ -32,9 +32,9 @@ flowchart TD
 | `make lint` | Run cppcheck static analysis |
 | `make config` | Run configuration wizard |
 
-## Project Configuration
+## Project Configuration (`project.yaml`)
 
-Projects define settings in `project.yaml`:
+Projects define settings in `project.yaml` at the project root:
 
 ```yaml
 name: MyProject
@@ -43,13 +43,13 @@ sw_version: "2.3"
 
 build_settings:
   development:
-    programmer: Pickit4-linux
+    programmer: Pickit4
     processor: 18F16Q41
     defines:
       - DEVELOPMENT
       - SHELL_ENABLED
       - LOGGING_ENABLED
-    
+  
   release:
     programmer: Pickit4
     processor: 18F16Q41
@@ -60,12 +60,60 @@ build_settings:
       - src/os/shell/*
 ```
 
+### Development vs Release Profiles
+
+| Profile | Purpose | Defines |
+|---------|---------|---------|
+| `development` | Debug builds with full features | `DEVELOPMENT`, `SHELL_ENABLED`, etc. |
+| `release` | Production builds, minimal features | `RELEASE` only |
+
+### How Defines Work
+
+The `defines` list becomes `-D` compiler flags:
+
+```python
+# In xc8.py
+defines = [
+    f'__XC8_{env.standard.upper()}__',
+    '_XC_H_',
+    f'__PRODUCT_NAME__={project.name}',
+    f'__PRODUCT_VERSION__={project.git_hash}',
+    f'__PROCESSOR__={env.processor}',
+    *env.defines,  # ← from project.yaml
+]
+for symbol in defines:
+    flag(f'-D{symbol}')
+```
+
+This means `defines: [SHELL_ENABLED, LOGGING_ENABLED]` produces:
+```
+-DSHELL_ENABLED -DLOGGING_ENABLED
+```
+
+Use in C code:
+```c
+#ifdef SHELL_ENABLED
+    shell_init();
+#endif
+```
+
+### Skip Rules for Release Builds
+
+Files matching `skip_rules` patterns are excluded from release builds:
+
+```yaml
+skip_rules:
+  - src/shellcommands/*
+  - src/os/shell/*
+  - src/os/json/*
+```
+
 ## Compiler Support
 
 Two compiler backends:
 
-| Compiler | Class | Flag |
-|----------|-------|------|
+| Compiler | Class | YAML Flag |
+|----------|-------|-----------|
 | `xc8` | Legacy (XC8 v2.x) | `compiler: legacy` |
 | `xc8-cc` | Clang-based (XC8 v3.x) | `compiler: clang` |
 
@@ -73,12 +121,28 @@ Default is legacy compiler.
 
 ## Code Generation
 
-Uses [cog](https://nedbatchelder.com/code/cog/) for code generation:
-- Pin definitions from `pinmap.py`
-- PPS functions from hardware descriptions
-- Dev/Release pin variants
+Codegen runs via [cog](https://nedbatchelder.com/code/cog/) before compilation.
 
-See [codegen.md](codegen.md) for details.
+**Key principle**: Project-specific codegen lives in the project, NOT in the toolchain.
+
+```
+project-root/
+├── project.yaml          # Build configuration
+├── cogfiles.txt          # List of files to process
+├── pinmap.py            # Pin definitions (project-specific)
+└── src/
+    ├── pins.h           # Cog block generates GPIO declarations
+    ├── pins.c           # Cog block generates init code
+    └── backlight.c      # Cog block generates lookup tables
+```
+
+The toolchain provides helper modules in `cogscripts/codegen/`:
+- `Enum` - Generate C enums from Python lists
+- `Struct` - Generate C structs
+- `Function` - Generate function declarations/definitions
+- `pins` - Generate pin GPIO code from `pinmap.py`
+
+See [codegen.md](codegen.md) for writing cog blocks.
 
 ## Virtual Environment
 
@@ -96,3 +160,4 @@ Uses `uv` for Python dependency management. Scripts run in the toolchain's virtu
 | `program.py` | Program release hex |
 | `xc8.py` | Legacy compiler wrapper |
 | `xc8_cc.py` | Clang compiler wrapper |
+| `configure.py` | Interactive project.yaml wizard |
