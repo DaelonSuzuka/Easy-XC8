@@ -53,6 +53,8 @@ def fix_project(proj):
         inherit('skip_rules', [])
         inherit('compiler', 'legacy')
         inherit('standard', 'c89')
+        inherit('float_size', 32)
+        inherit('double_size', 32)
 
     # make sure the environment definitions exist
     set_default('development', {})

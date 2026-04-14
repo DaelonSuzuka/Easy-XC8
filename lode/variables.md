@@ -71,22 +71,20 @@ PROGRAMMER := $(shell $(VENV_PYTHON) $(TOOLCHAIN_DIR)/scripts/load_vars.py devel
 | `build_dir` | `build` |
 | `git_hash` | `abc123` |
 
-### Development Profile
+### Profile Variables
 
-| Variable | Example |
-|----------|---------|
-| `development.processor` | `18F16Q41` |
-| `development.programmer` | `Pickit4` |
-| `development.compiler` | `legacy` |
-| `development.standard` | `c89` |
+Both `development` and `release` profiles inherit the same keys via `fix_env()`. Access with dot notation: `development.processor`, `release.processor`, etc.
 
-### Release Profile
-
-| Variable | Example |
-|----------|---------|
-| `release.processor` | `18F16Q41` |
-| `release.programmer` | `Pickit4` |
-| `release.compiler` | `legacy` |
+| Key | Example | Default |
+|-----|---------|---------|
+| `processor` | `18F16Q41` | *(required)* |
+| `programmer` | `Pickit4` | *(required)* |
+| `compiler` | `legacy` | `legacy` |
+| `standard` | `c89` | `c89` |
+| `float_size` | `24` | `32` |
+| `double_size` | `24` | `32` |
+| `defines` | `[DEVELOPMENT, SHELL_ENABLED]` | `[]` |
+| `skip_rules` | `[src/os/shell/*]` | `[]` |
 
 ## Default Values
 
@@ -99,6 +97,8 @@ set_default('obj_dir', 'obj')
 set_default('build_dir', 'build')
 set_default('compiler', 'legacy')
 set_default('standard', 'c89')
+set_default('float_size', 32)
+set_default('double_size', 32)
 ```
 
 ## Exit Codes

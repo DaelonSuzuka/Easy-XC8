@@ -18,8 +18,8 @@ class Xc8:
 
         flag('--STACK=hybrid:auto:auto:auto')  # specify stack parameters
         flag('--FILL=0xffff')  # fill empty space in the hexfile with a pattern
-        flag('--FLOAT=32')  # set floats to 32 bits
-        flag('--DOUBLE=32')  # set doubles to 32 bits
+        flag(f'--FLOAT={env.float_size}')  # float size from project.yaml
+        flag(f'--DOUBLE={env.double_size}')  # double size from project.yaml
         flag('--TIME')  # display compiler profiling information
 
         flag(f'--STD={env.standard}')

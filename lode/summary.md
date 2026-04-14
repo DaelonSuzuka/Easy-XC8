@@ -119,6 +119,24 @@ Two compiler backends:
 
 Default is legacy compiler.
 
+### Float Size (Legacy Compiler)
+
+The legacy compiler supports configurable float and double sizes via `project.yaml`:
+
+```yaml
+development:
+  float_size: 24    # 24 or 32
+  double_size: 24    # 24 or 32
+```
+
+Defaults are 32-bit if not specified. This project uses **24-bit** to save flash space — the PIC18F16Q41 development build was hitting the 64KB code space limit. The 24-bit float libraries save ~2.6KB. 24-bit floats have ~3 decimal digits of precision (vs ~7 for 32-bit), adequate for SWR/ADC math.
+
+```python
+# In xc8.py
+flag(f'--FLOAT={env.float_size}')
+flag(f'--DOUBLE={env.double_size}')
+```
+
 ## Code Generation
 
 Codegen runs via [cog](https://nedbatchelder.com/code/cog/) before compilation.
