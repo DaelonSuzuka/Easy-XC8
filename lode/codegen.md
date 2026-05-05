@@ -2,6 +2,24 @@
 
 The build system uses [cog](https://nedbatchelder.com/code/cog/) to auto-generate C code from Python. Code generation runs during `make compile` before the compiler.
 
+## Why Code Generation
+
+Before codegen, pin configuration was scattered across `hardware.h` (pin name macros)
+and `hardware.c` (init functions, ANSEL/TRIS/PORT registers). Changing a pin from
+digital output to analog input could require 5-7 edits across multiple files. The
+temporal distance between making a typo and detecting it (3+ weeks) made these bugs
+expensive and frustrating.
+
+Codegen eliminates the problem by making `pinmap.py` the single source of truth.
+Everything — GPIO helpers, button arrays, PPS macros, ADC channels, init code —
+is derived from one declarative file. Wrong configurations become compiler errors
+because the generated functions and macros only exist for pins that are declared.
+
+**Result:** New project setup went from days (with a weeks-long tail of config bugs)
+to ~30 minutes from schematic to running firmware with debug shell.
+
+Design origin and full rationale: https://daelon.dev/posts/codegen1/
+
 ## Key Principle
 
 **Project-specific codegen lives in the project, NOT in the toolchain.**

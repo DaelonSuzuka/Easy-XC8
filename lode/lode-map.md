@@ -2,6 +2,10 @@
 
 Index of documentation for the build system module.
 
+## Entry Point
+
+- [quickstart.md](quickstart.md) - Load first when working with the toolchain
+
 ## Core Files
 
 - [summary.md](summary.md) - Build system overview
@@ -14,7 +18,7 @@ Index of documentation for the build system module.
 
 ## Code Generation
 
-- [codegen.md](codegen.md) - Code generation with cog
+- [codegen.md](codegen.md) - Code generation with cog (rationale + article link)
 
 ## Analysis
 
