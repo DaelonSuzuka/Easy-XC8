@@ -59,12 +59,16 @@ Generate documentation with Doxygen
 Run the linter to check for errors
 > $ make lint
 
-Run host unit tests for pure modules (`*_test.c`, built with zig from the venv)
+Run host unit tests for pure modules (`*_test.c`)
 > $ make test
 
-See `lode/host-tests.md` for the convention: co-locate `foo_test.c` next to
-`foo.c`, no PIC/mocks. After a toolchain bump run `make venv` once so `ziglang`
-is installed.
+See `lode/host-tests.md`. Co-locate `foo_test.c` next to pure `foo.c`. Compiler
+is machine-local Zig, not the project venv:
+
+```bash
+uv tool install ziglang    # once per machine
+# or: HOST_CC=gcc make test
+```
 
 This is a suprise tool that will help us later:
 > $ make cog 

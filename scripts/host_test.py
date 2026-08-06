@@ -1,5 +1,15 @@
 #!/usr/bin/env python3
-"""Discover, build, and run host unit tests (*_test.c) with zig cc.
+"""Discover, build, and run host unit tests (*_test.c).
+
+Compiler resolution (first match wins):
+  1. HOST_CC env (space-separated), e.g. HOST_CC=gcc
+  2. python-zig on PATH  —  uv tool install ziglang
+  3. zig on PATH         —  system Zig (uses: zig cc)
+  4. uvx --from ziglang python-zig
+  5. python -m ziglang   —  only if ziglang is importable in this env
+
+Zig is intentionally not a toolchain venv dependency (~400MB unpacked).
+Install once per machine:  uv tool install ziglang
 
 Convention:
   - Co-located: foo_test.c next to foo.c (same directory, stem match)
@@ -13,6 +23,7 @@ Usage (from project root via make):
 from __future__ import annotations
 
 import os
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -33,6 +44,10 @@ EXCLUDE_TOP = {
     "toolchain",
 }
 
+# Resolved once per process: argv prefix that ends ready for cc flags
+# e.g. ["python-zig", "cc"] or ["gcc"]
+_cc_prefix: list[str] | None = None
+
 
 def project_root() -> Path:
     return Path.cwd().resolve()
@@ -42,14 +57,12 @@ def toolchain_dir() -> Path:
     env = os.environ.get("TOOLCHAIN_DIR")
     if env:
         return Path(env).resolve()
-    # scripts/ live in toolchain/scripts/
     return Path(__file__).resolve().parent.parent
 
 
 def discover_tests(root: Path) -> list[Path]:
     tests: list[Path] = []
     for dirpath, dirnames, filenames in os.walk(root):
-        # prune excluded dirs in-place
         rel = Path(dirpath).resolve().relative_to(root)
         parts = rel.parts
         if parts and parts[0] in EXCLUDE_TOP:
@@ -65,7 +78,7 @@ def discover_tests(root: Path) -> list[Path]:
 
 def companion_source(test_c: Path) -> Path | None:
     """foo_test.c -> foo.c in the same directory."""
-    stem = test_c.stem  # foo_test
+    stem = test_c.stem
     if not stem.endswith("_test"):
         return None
     base = stem[: -len("_test")]
@@ -73,31 +86,67 @@ def companion_source(test_c: Path) -> Path | None:
     return candidate if candidate.is_file() else None
 
 
-def host_cc_cmd() -> list[str]:
-    """Prefer venv ziglang; allow HOST_CC override (space-separated)."""
+def log(msg: str = "") -> None:
+    print(msg, flush=True)
+
+
+def _probe(cmd: list[str]) -> bool:
+    try:
+        r = subprocess.run(cmd, capture_output=True, timeout=120)
+        return r.returncode == 0
+    except (FileNotFoundError, subprocess.TimeoutExpired, OSError):
+        return False
+
+
+def resolve_cc() -> list[str]:
+    """Return compiler argv prefix including the 'cc' mode for zig wrappers."""
+    global _cc_prefix
+    if _cc_prefix is not None:
+        return _cc_prefix
+
     override = os.environ.get("HOST_CC")
     if override:
-        return override.split()
-    return [sys.executable, "-m", "ziglang", "cc"]
+        _cc_prefix = override.split()
+        log(f"host cc: HOST_CC ({' '.join(_cc_prefix)})")
+        return _cc_prefix
 
+    # uv tool install ziglang  →  python-zig on PATH
+    python_zig = shutil.which("python-zig")
+    if python_zig and _probe([python_zig, "version"]):
+        _cc_prefix = [python_zig, "cc"]
+        log(f"host cc: {python_zig} cc  (uv tool)")
+        return _cc_prefix
 
-def ensure_zig() -> None:
-    if os.environ.get("HOST_CC"):
-        return
-    try:
-        subprocess.run(
-            [sys.executable, "-m", "ziglang", "version"],
-            check=True,
-            capture_output=True,
-        )
-    except (subprocess.CalledProcessError, FileNotFoundError) as e:
-        print(
-            "error: ziglang not available in this Python env.\n"
-            "  From the project: make venv   (toolchain must depend on ziglang)\n"
-            "  Or set HOST_CC=gcc",
-            file=sys.stderr,
-        )
-        raise SystemExit(2) from e
+    # System Zig
+    zig = shutil.which("zig")
+    if zig and _probe([zig, "version"]):
+        _cc_prefix = [zig, "cc"]
+        log(f"host cc: {zig} cc")
+        return _cc_prefix
+
+    # Ephemeral / cached via uvx (no permanent tool install)
+    uv = shutil.which("uv")
+    if uv and _probe([uv, "x", "--from", "ziglang", "python-zig", "version"]):
+        _cc_prefix = [uv, "x", "--from", "ziglang", "python-zig", "cc"]
+        log("host cc: uvx --from ziglang python-zig cc")
+        return _cc_prefix
+
+    # Optional: ziglang still installed in this Python env
+    if _probe([sys.executable, "-m", "ziglang", "version"]):
+        _cc_prefix = [sys.executable, "-m", "ziglang", "cc"]
+        log("host cc: python -m ziglang cc  (venv/package)")
+        return _cc_prefix
+
+    print(
+        "error: no host C compiler found for *_test.c\n"
+        "  Install Zig once (recommended):\n"
+        "    uv tool install ziglang\n"
+        "  Or use a system compiler:\n"
+        "    HOST_CC=gcc make test\n"
+        "  Or system zig on PATH, or: uvx --from ziglang python-zig version",
+        file=sys.stderr,
+    )
+    raise SystemExit(2)
 
 
 def build_and_run(test_c: Path, companion: Path, out_dir: Path, root: Path) -> int:
@@ -114,7 +163,7 @@ def build_and_run(test_c: Path, companion: Path, out_dir: Path, root: Path) -> i
         toolchain_dir() / "host",
     }
 
-    cmd = host_cc_cmd() + [
+    cmd = resolve_cc() + [
         "-std=c99",
         "-Wall",
         "-Werror",
@@ -143,13 +192,9 @@ def build_and_run(test_c: Path, companion: Path, out_dir: Path, root: Path) -> i
     return 0
 
 
-def log(msg: str = "") -> None:
-    print(msg, flush=True)
-
-
 def main() -> int:
     root = project_root()
-    ensure_zig()
+    resolve_cc()  # fail early with a clear message
 
     tests = discover_tests(root)
     if not tests:

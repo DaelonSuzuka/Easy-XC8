@@ -13,5 +13,4 @@ dependencies = [
     "numpy>=2.3.5",
     "pip>=25.3",
     "pyyaml>=6.0.3",
-    "ziglang>=0.16.0",
 ]

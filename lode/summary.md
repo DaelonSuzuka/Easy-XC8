@@ -30,10 +30,10 @@ flowchart TD
 | `make program` | Program release hex to chip |
 | `make clean` | Remove build artifacts |
 | `make lint` | Run cppcheck static analysis |
-| `make test` | Host unit tests for pure modules (`*_test.c`, zig cc) |
+| `make test` | Host unit tests for pure modules (`*_test.c`) |
 | `make config` | Run configuration wizard |
 
-Host tests document: [host-tests.md](host-tests.md).
+Host tests: [host-tests.md](host-tests.md). Zig via `uv tool install ziglang`, not venv.
 
 ## Project Configuration (`project.yaml`)
 

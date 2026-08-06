@@ -18,14 +18,23 @@ inject, logs. Do not mock hardware to “test” drivers.
 From any project that uses this toolchain:
 
 ```bash
-make venv          # once after toolchain bump (installs ziglang)
-make test          # discover, compile, run all *_test.c
+make venv                    # project Python deps only (not Zig)
+uv tool install ziglang      # once per machine — shared Zig (~400MB unpacked)
+make test                    # discover, compile, run all *_test.c
 ```
 
-Optional: `HOST_CC=gcc make test` to use a system compiler instead of zig.
+Zig is **not** in the project venv (that would duplicate ~400MB per clone). Prefer
+a single machine-wide install via uv.
 
-Requires the project venv (`make venv`). Zig is pulled in as the `ziglang` PyPI
-package — no system C toolchain install required (including Windows).
+### Compiler resolution (`host_test.py`)
+
+First match wins:
+
+1. `HOST_CC` — e.g. `HOST_CC=gcc make test`
+2. `python-zig` on `PATH` — from `uv tool install ziglang`
+3. `zig` on `PATH` — system Zig (`zig cc`)
+4. `uvx --from ziglang python-zig` — on-demand / cache, no permanent tool
+5. `python -m ziglang` — only if ziglang happens to be in the active env
 
 ## Convention
 
@@ -126,6 +135,7 @@ After a toolchain bump in any PIC project:
 ```bash
 git submodule update
 make venv
+uv tool install ziglang   # if not already on this machine
 make test
 ```
 

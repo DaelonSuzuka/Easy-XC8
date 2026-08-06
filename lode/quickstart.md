@@ -24,11 +24,12 @@ Custom Python build system wrapping Microchip XC8. Make for orchestration, Pytho
 | `make program` | Program release hex |
 | `make clean` | Remove build artifacts |
 | `make lint` | cppcheck static analysis |
-| `make test` | Host unit tests (`*_test.c` via zig cc) — [host-tests.md](host-tests.md) |
+| `make test` | Host unit tests (`*_test.c`) — [host-tests.md](host-tests.md) |
 | `make config` | Interactive project.yaml wizard |
 
 Host tests: co-locate `foo_test.c` next to pure `foo.c`, then `make test`.
-No XC8 required. Full how-to: [host-tests.md](host-tests.md).
+No XC8. Install compiler once with `uv tool install ziglang` (not in project
+venv). Full how-to: [host-tests.md](host-tests.md).
 
 ## Project.yaml Structure
 
