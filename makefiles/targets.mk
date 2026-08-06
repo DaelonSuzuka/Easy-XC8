@@ -35,8 +35,13 @@ endif
 	
 # run cppcheck
 lint: venv
-	$(VENV_PYTHON) $(TOOLCHAIN_DIR)/scripts/cppcheck.py	
+	$(VENV_PYTHON) $(TOOLCHAIN_DIR)/scripts/cppcheck.py
 
-# 
+# Host unit tests: co-located *_test.c, built with zig cc from the venv
+# (see scripts/host_test.py). Does not require XC8. Override compiler with HOST_CC.
+test: venv
+	TOOLCHAIN_DIR=$(TOOLCHAIN_DIR) $(VENV_PYTHON) $(TOOLCHAIN_DIR)/scripts/host_test.py
+
+#
 project:
 	$(VENV_PYTHON) $(TOOLCHAIN_DIR)/scripts/project.py	

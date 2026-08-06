@@ -1,18 +1,22 @@
 import re
 
+# Always excluded from firmware builds. Host unit tests are co-located as
+# foo_test.c next to foo.c and compiled only by scripts/host_test.py (zig cc).
+BUILTIN_SKIP_RULES = [
+    r'.*_test\.c$',
+]
+
 
 def apply_skip_rules(project, env, sources):
     skipped = []
-    
-    rules = [re.compile(r) for r in env.skip_rules]
+
+    project_rules = list(getattr(env, 'skip_rules', None) or [])
+    rules = [re.compile(r) for r in BUILTIN_SKIP_RULES + project_rules]
 
     def check_skip_rules(f):
-        # print(f)
         for rule in rules:
-            # print(f'\t{skip}')
             if rule.search(f):
                 skipped.append(f)
-                # print('\tskipping')
                 return True
         return False
 

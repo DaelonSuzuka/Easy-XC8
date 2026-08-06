@@ -24,6 +24,10 @@ Index of documentation for the build system module.
 
 - [reports.md](reports.md) - Memory analysis (RAM/ROM usage)
 
+## Host tests
+
+- [host-tests.md](host-tests.md) - `make test`, `*_test.c` convention, zig cc via uv
+
 ---
 
 *This file is maintained by the AI. Update when adding new documentation.*
