@@ -18,10 +18,13 @@ Convention:
 
 Usage (from project root via make):
   make test
+  make test   # runs --check-cc first via Makefile
+  python host_test.py --check-cc   # compiler only
 """
 
 from __future__ import annotations
 
+import argparse
 import os
 import shutil
 import subprocess
@@ -139,11 +142,17 @@ def resolve_cc() -> list[str]:
 
     print(
         "error: no host C compiler found for *_test.c\n"
-        "  Install Zig once (recommended):\n"
+        "\n"
+        "  Recommended (once per machine, shared across projects):\n"
         "    uv tool install ziglang\n"
-        "  Or use a system compiler:\n"
+        "\n"
+        "  Then re-run:\n"
+        "    make test\n"
+        "\n"
+        "  Alternatives:\n"
         "    HOST_CC=gcc make test\n"
-        "  Or system zig on PATH, or: uvx --from ziglang python-zig version",
+        "    HOST_CC=clang make test\n"
+        "    # or install system zig so `zig` is on PATH\n",
         file=sys.stderr,
     )
     raise SystemExit(2)
@@ -192,10 +201,20 @@ def build_and_run(test_c: Path, companion: Path, out_dir: Path, root: Path) -> i
     return 0
 
 
-def main() -> int:
-    root = project_root()
-    resolve_cc()  # fail early with a clear message
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description="Host unit tests for *_test.c")
+    parser.add_argument(
+        "--check-cc",
+        action="store_true",
+        help="only verify a host C compiler is available, then exit",
+    )
+    args = parser.parse_args(argv)
 
+    resolve_cc()  # fail early with install hint
+    if args.check_cc:
+        return 0
+
+    root = project_root()
     tests = discover_tests(root)
     if not tests:
         log("no host tests (*_test.c)")

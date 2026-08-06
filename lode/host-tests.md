@@ -20,8 +20,12 @@ From any project that uses this toolchain:
 ```bash
 make venv                    # project Python deps only (not Zig)
 uv tool install ziglang      # once per machine — shared Zig (~400MB unpacked)
-make test                    # discover, compile, run all *_test.c
+make test                    # check-host-cc, then discover/compile/run
+make check-host-cc           # compiler probe only (same hint as a missing CC)
 ```
+
+If no compiler is found, `make test` / `make check-host-cc` exits nonzero and prints
+`uv tool install ziglang` (and `HOST_CC=…` alternatives).
 
 Zig is **not** in the project venv (that would duplicate ~400MB per clone). Prefer
 a single machine-wide install via uv.

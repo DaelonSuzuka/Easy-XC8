@@ -37,9 +37,14 @@ endif
 lint: venv
 	$(VENV_PYTHON) $(TOOLCHAIN_DIR)/scripts/cppcheck.py
 
-# Host unit tests: co-located *_test.c, built with zig cc from the venv
-# (see scripts/host_test.py). Does not require XC8. Override compiler with HOST_CC.
-test: venv
+# Host unit tests: co-located *_test.c (see scripts/host_test.py / lode/host-tests.md).
+# Compiler is machine-local Zig (uv tool install ziglang), not the project venv.
+# Override with HOST_CC=gcc if needed.
+.PHONY: check-host-cc test
+check-host-cc: venv
+	TOOLCHAIN_DIR=$(TOOLCHAIN_DIR) $(VENV_PYTHON) $(TOOLCHAIN_DIR)/scripts/host_test.py --check-cc
+
+test: check-host-cc
 	TOOLCHAIN_DIR=$(TOOLCHAIN_DIR) $(VENV_PYTHON) $(TOOLCHAIN_DIR)/scripts/host_test.py
 
 #
