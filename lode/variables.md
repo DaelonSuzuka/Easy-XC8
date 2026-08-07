@@ -37,7 +37,7 @@ Use dot notation for nested values:
 python toolchain/scripts/load_vars.py development.processor
 # Output: 18F16Q41
 
-# Get release programmer
+# Get release programmer (family name; OS resolved at upload)
 python toolchain/scripts/load_vars.py release.programmer
 # Output: Pickit4
 ```

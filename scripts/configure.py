@@ -38,8 +38,9 @@ processors = {
 }
 
 
-programmers = json.loads(open(Path(Path(__file__).parent, "upload.json")).read())
-programmer_list = [p for p in programmers.keys() if p != 'default']
+from programmers import list_programmer_families
+
+programmer_list = list_programmer_families()
 
 
 def validate_name(answer):

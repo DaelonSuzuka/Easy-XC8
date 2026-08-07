@@ -2,38 +2,39 @@
 
 import sys
 import os
-import json
-from dotmap import DotMap
+from pathlib import Path
+
 from project import load_project
-
-
-current_dir = os.path.dirname(__file__)
-file_path = os.path.join(current_dir, "upload.json")
-programmers = DotMap(json.loads(open(file_path).read()))
+from programmers import resolve_programmer
 
 
 def program():
-    project = DotMap(load_project())
-    env = project.release
+    project = load_project()
+    env = project["release"]
 
-    hexfile = f"{project.build_dir}/{project.name}"
-    source = f'{hexfile}_v{project.sw_version}_{env.processor}.hex'
+    hexfile = f"{project['build_dir']}/{project['name']}"
+    source = f"{hexfile}_v{project['sw_version']}_{env['processor']}.hex"
 
-    programmer = programmers[env.programmer]
+    name = env.get("programmer") or project.get("programmer")
+    programmer = resolve_programmer(name)
+
+    # Match upload.py: ipecmd on posix wants an absolute hex path
+    source_arg = str(Path(source).absolute()) if os.name != "nt" else source
+
     command = [
-        programmer['command'],
-        programmer['target'] + env.processor,
-        programmer['source'] + source,
-        *programmer['flags']
+        programmer["command"],
+        programmer["target"] + env["processor"],
+        programmer["source"] + source_arg,
+        *programmer["flags"],
     ]
 
+    print(f"program: {programmer['name']} ({programmer['platform']}) → {programmer['command']}")
     exit_code = os.system(" ".join(command))
 
-    # clean up temp files
-    for f in programmer.garbage:
+    for f in programmer["garbage"]:
         try:
             os.remove(f)
-        except:
+        except OSError:
             pass
 
     sys.exit(exit_code)

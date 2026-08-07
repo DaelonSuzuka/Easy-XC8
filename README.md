@@ -111,7 +111,11 @@ Planned features:
 
 ## `upload.py`
 
-This script has an accompanying file(`upload.json`) that tells it how to interact with a variety of usb pic programmers. I've gotten it to work in linux by selecting `Pickit4-linux` as your programmer in project.yaml. Unfortunately, before this would work, I had to fix Microchip's `ipecmd.sh` that was supposed to be edited during installation with the path of MPLABX's local jvm. This was a pain.
+Programmer families are defined in `scripts/upload.json` with per-platform
+overlays (`windows` / `posix`). `project.yaml` only names the family
+(`programmer: Pickit4`); upload/program pick `ipecmd` vs `ipecmd.sh` on the
+host. See `lode/configure.md`. Note: Linux still needs a working Microchip
+`ipecmd.sh` (JVM path) from the MPLABX install.
 
 
 # venvs

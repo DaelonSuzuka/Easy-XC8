@@ -85,32 +85,47 @@ build_settings:
 
 ## Programmers
 
-Available programmers are defined in `toolchain/scripts/upload.json`:
+`project.yaml` names the **family** only (same on every OS). Host platform
+selects the command at upload/program time via `scripts/programmers.py`.
 
-| Programmer | Command | Platform |
-|------------|---------|----------|
-| Pickit3 | `pk3cmd` | All |
-| Pickit4 | `ipecmd` | Windows |
-| Pickit4-linux | `ipecmd.sh` | Linux |
-| Pickit5-linux | `ipecmd.sh` | Linux |
-| ICD-U80-win | `ccsloader` | Windows |
-| ICD-U80-linux | `ccsloader` | Linux |
+Defined in `toolchain/scripts/upload.json`:
+
+| Family | Windows command | Posix command |
+|--------|-----------------|---------------|
+| Pickit3 | `pk3cmd` | `pk3cmd` |
+| Pickit4 | `ipecmd` | `ipecmd.sh` |
+| Pickit5 | `ipecmd` | `ipecmd.sh` |
+| ICD-U80 | `ccsloader` | `ccsloader` (flags differ) |
+
+Legacy aliases still work: `Pickit4-linux` → `Pickit4`, `Pickit5-linux` →
+`Pickit5`, `ICD-U80-win` / `ICD-U80-linux` → `ICD-U80`. Prefer family names in
+new configs.
+
+```yaml
+programmer: Pickit4   # not Pickit4-linux
+```
 
 ## Extending Programmers
 
-Add new programmers to `upload.json`:
+Add a family to `upload.json` with shared fields and a `platforms` map:
 
 ```json
 {
   "MyProgrammer": {
-    "command": "myprog",
     "target": "-p",
     "source": "-f",
     "flags": ["-v"],
-    "garbage": ["*.log"]
+    "garbage": ["*.log"],
+    "platforms": {
+      "windows": { "command": "myprog.exe" },
+      "posix": { "command": "myprog" }
+    }
   }
 }
 ```
+
+Platform overlay may also override `flags`, `target`, `source`, or `garbage`
+when those differ by OS.
 
 ## Extending Feature Toggles
 

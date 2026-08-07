@@ -2,11 +2,11 @@
 
 import os
 import sys
-import json
 import argparse
-from dotmap import DotMap
-from project import load_project
 from pathlib import Path
+
+from project import load_project
+from programmers import resolve_programmer
 
 # ------------------------------------------------------------------------------
 
@@ -15,13 +15,13 @@ def assemble_upload_command(programmer, args):
     command = []
     add = command.append
 
-    add(programmer['command'])
-    add(programmer['target'] + args.target)
-    
-    # ipecmd on linux requires absolute path
-    add(programmer['source'] + str(Path(args.source).absolute()))
+    add(programmer["command"])
+    add(programmer["target"] + args.target)
 
-    for flag in programmer['flags']:
+    # ipecmd on linux requires absolute path
+    add(programmer["source"] + str(Path(args.source).absolute()))
+
+    for flag in programmer["flags"]:
         add(flag)
 
     return " ".join(command)
@@ -29,38 +29,28 @@ def assemble_upload_command(programmer, args):
 
 def main(programmer, args):
     command = assemble_upload_command(programmer, args)
+    print(f"upload: {programmer['name']} ({programmer['platform']}) → {programmer['command']}")
 
     exit_code = os.system(command)
 
-    # clean up temp files
-    for f in programmer['garbage']:
+    for f in programmer["garbage"]:
         try:
             os.remove(f)
-        except:
+        except OSError:
             pass
 
     sys.exit(exit_code)
 
 
 if __name__ == "__main__":
-    current_dir = os.path.dirname(__file__)
-    file_path = os.path.join(current_dir, "upload.json")
-
-    programmers = json.loads(open(file_path).read())
-
     parser = argparse.ArgumentParser()
     arg = parser.add_argument
-    # try:
+
     project = load_project()
     source = f"{project['build_dir']}/{project['name']}.hex"
-    arg("-t", "--target", default=project['development']['processor'])
+    arg("-t", "--target", default=project["development"]["processor"])
     arg("-s", "--source", default=source)
-    arg("-p", "--programmer", default=project['development']['programmer'])
-    # except:
-    #     arg("-t", "--target", required=True)
-    #     arg("-s", "--source", required=True)
-    #     arg("-p", "--programmer", default=programmers['default'])
+    arg("-p", "--programmer", default=project["development"].get("programmer") or project.get("programmer"))
 
     args = parser.parse_args()
-
-    main(programmers[args.programmer], args)
+    main(resolve_programmer(args.programmer), args)

@@ -48,6 +48,7 @@ def fix_project(proj):
         if env['processor'] is None:
             raise Exception('Error: must define processor in project.yaml')
 
+        inherit('programmer', 'Pickit4')  # family name; OS resolved at upload time
         inherit('toolchain_options', [])
         inherit('defines', [])
         inherit('skip_rules', [])
