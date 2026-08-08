@@ -13,7 +13,7 @@ Index of documentation for the build system module.
 
 ## Configuration
 
-- [configure.md](configure.md) - Interactive project.yaml wizard
+- [configure.md](configure.md) - Creating a project.yaml (no wizard; schema + guide)
 - [variables.md](variables.md) - Accessing config from Make and scripts
 
 ## Code Generation

@@ -25,7 +25,6 @@ Custom Python build system wrapping Microchip XC8. Make for orchestration, Pytho
 | `make clean` | Remove build artifacts |
 | `make lint` | cppcheck static analysis |
 | `make test` | Host unit tests (`*_test.c`) — [host-tests.md](host-tests.md) |
-| `make config` | Interactive project.yaml wizard |
 | `make env` | Generate .vscode/c_cpp_properties.json from project.yaml |
 
 Host tests: co-locate `foo_test.c` next to pure `foo.c`, then `make test`.
@@ -50,7 +49,7 @@ build_settings:
 ## Lode Index
 
 - [summary.md](summary.md) — full build system overview
-- [configure.md](configure.md) — project.yaml wizard
+- [configure.md](configure.md) — creating a project.yaml
 - [codegen.md](codegen.md) — cog code generation
 - [reports.md](reports.md) — post-build memory analysis
 - [variables.md](variables.md) — build variable system

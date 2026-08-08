@@ -14,7 +14,7 @@ import platform
 import sys
 from pathlib import Path
 
-# Old project.yaml / wizard names → family key in upload.json
+# Old project.yaml names → family key in upload.json
 LEGACY_ALIASES = {
     "Pickit4-linux": "Pickit4",
     "Pickit5-linux": "Pickit5",
@@ -39,7 +39,7 @@ def host_platform_key() -> str:
 
 
 def list_programmer_families(table: dict | None = None) -> list[str]:
-    """Names suitable for project.yaml / configure wizard (not aliases)."""
+    """Names suitable for project.yaml (not legacy aliases)."""
     table = table if table is not None else load_programmers_table()
     names = []
     for key, entry in table.items():

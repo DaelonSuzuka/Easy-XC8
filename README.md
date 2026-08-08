@@ -17,24 +17,18 @@ This project is designed to be included in your project as a git "submodule", wh
 
 In your repository, run:
 
-Windows:
-```
-git submodule add https://github.com/DaelonSuzuka/Easy-XC8.git toolchain
-python toolchain/install.py
-make config
-```
-
-Linux:
 ```
 git submodule add https://github.com/DaelonSuzuka/Easy-XC8.git toolchain
 python3 toolchain/install.py
-make config
 ```
 
+Then create `project.yaml` — see `lode/configure.md` for a template and
+`schemas/project.schema.json` for validation. The `$schema` key in
+project.yaml enables autocomplete in VS Code.
+
 This will:
- - add the submodule to your git repository, and download this repo to `./toolchain`. 
+ - add the submodule to your git repository, and download this repo to `./toolchain`.
  - create the minimum usable `Makefile` in the root directory of your project
- - create `project.yaml` using the project configuration wizard
 
 You should now be ready to use the Easy-XC8 toolchain.
 
@@ -69,6 +63,9 @@ is machine-local Zig, not the project venv:
 uv tool install ziglang    # once per machine
 # or: HOST_CC=gcc make test
 ```
+
+Generate .vscode/c_cpp_properties.json (IntelliSense config) from project.yaml:
+> $ make env
 
 This is a suprise tool that will help us later:
 > $ make cog 
@@ -127,7 +124,6 @@ Fortunately, the makefile is _supposed_ to handle the entire venv process for yo
 
 # Future goals:
 
-- Include VS Code default settings and extension recommendations
 - Figure out how to explain wtf cog is
 - how to customize build.py
 - how to customize upload.py

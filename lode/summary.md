@@ -31,7 +31,6 @@ flowchart TD
 | `make clean` | Remove build artifacts |
 | `make lint` | Run cppcheck static analysis |
 | `make test` | Host unit tests for pure modules (`*_test.c`) |
-| `make config` | Run configuration wizard |
 | `make env` | Generate .vscode/c_cpp_properties.json (IntelliSense config) |
 
 Host tests: [host-tests.md](host-tests.md). Zig via `uv tool install ziglang`, not venv.
@@ -184,8 +183,8 @@ Uses `uv` for Python dependency management. Scripts run in the toolchain's virtu
 | `upload.py` | Flash to device |
 | `program.py` | Program release hex |
 | `xc8.py` | Legacy compiler wrapper |
-| `xc8_cc.py` | Clang compiler wrapper |
-| `configure.py` | Interactive project.yaml wizard |
+| `env.py` | Generate .vscode/c_cpp_properties.json |
+| `xc8_cc.py` | Clang compiler wrapper (currently unusable, see Compiler Support) |
 
 ## Static Analysis
 

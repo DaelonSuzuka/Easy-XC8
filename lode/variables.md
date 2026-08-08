@@ -117,7 +117,7 @@ live only in `development` and `release` after normalization.
 
 1. Add an `inherit('new_key', default)` call inside `fix_env()` in `project.py`.
 2. Add the key to the table in `variables.md` with its default.
-3. If the key should appear in the wizard output, add it to `configure.py`.
+3. Add the key to `schemas/project.schema.json`.
 
 If you forget step 1, the key will be silently absent from the profile dicts
 and any code accessing `env.new_key` will get `None` (or a `DotMap` AttributeError
