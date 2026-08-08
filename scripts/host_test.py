@@ -141,15 +141,18 @@ def resolve_cc() -> list[str]:
         return _cc_prefix
 
     print(
-        "error: no host C compiler found for *_test.c\n"
+        "!!! Host C compiler not found !!!\n"
         "\n"
-        "  Recommended (once per machine, shared across projects):\n"
+        "  Host tests are designed to run with zig cc (one-time setup, shared\n"
+        "  across all projects on this machine):\n"
+        "\n"
         "    uv tool install ziglang\n"
         "\n"
         "  Then re-run:\n"
+        "\n"
         "    make test\n"
         "\n"
-        "  Alternatives:\n"
+        "  Fallbacks (NOT recommended — zig cc is the supported path):\n"
         "    HOST_CC=gcc make test\n"
         "    HOST_CC=clang make test\n"
         "    # or install system zig so `zig` is on PATH\n",

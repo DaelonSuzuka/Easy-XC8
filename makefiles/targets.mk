@@ -49,4 +49,8 @@ test: check-host-cc
 
 #
 project:
-	$(VENV_PYTHON) $(TOOLCHAIN_DIR)/scripts/project.py	
+	$(VENV_PYTHON) $(TOOLCHAIN_DIR)/scripts/project.py
+
+# Generate .vscode/c_cpp_properties.json from project.yaml
+env: venv
+	$(VENV_PYTHON) $(TOOLCHAIN_DIR)/scripts/env.py

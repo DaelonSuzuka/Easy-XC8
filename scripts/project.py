@@ -28,6 +28,7 @@ def fix_project(proj):
     set_default('obj_dir', 'obj')
     set_default('build_dir', 'build')
     set_default('compiler', 'legacy') # legacy or clang
+    set_default('compiler_version', None)  # desired XC8 version, e.g. "2.45"; None = use newest
     set_default('skip_rules', [])
 
     # fix dev and release environments

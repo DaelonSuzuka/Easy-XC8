@@ -10,6 +10,8 @@ from programmers import resolve_programmer
 
 def program():
     project = load_project()
+    # Programs the release hex — named with version + processor for the shop
+    # bulk programmer. For local dev board uploads use `make upload` (upload.py).
     env = project["release"]
 
     hexfile = f"{project['build_dir']}/{project['name']}"

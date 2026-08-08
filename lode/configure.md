@@ -14,6 +14,9 @@ Or directly:
 python toolchain/scripts/configure.py
 ```
 
+The wizard is **create-only** — if `project.yaml` already exists it exits
+without modifying it. Edit the file by hand to change an existing project.
+
 ## Wizard Flow
 
 The wizard prompts for:
@@ -68,8 +71,6 @@ name: MyProject
 hw_version: '0.0.1'
 sw_version: '0.0.1'
 build_settings:
-  toolchain_options:
-  - USE_DEP_SCANNER
   development:
     processor: 18F27K42
     programmer: Pickit4

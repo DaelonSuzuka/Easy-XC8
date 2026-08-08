@@ -118,9 +118,6 @@ def project_config_wizard():
         result['sw_version'] = '0.0.1'
 
         result['build_settings'] = {
-            'toolchain_options': [
-                'USE_DEP_SCANNER',
-            ],
             'development': {
                 'processor': config['processor'],
                 'programmer': config['programmer'],

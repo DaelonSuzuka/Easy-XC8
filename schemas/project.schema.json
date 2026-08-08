@@ -1,0 +1,130 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "project.yaml",
+    "description": "Build configuration for the toolchain. See toolchain/lode/variables.md for key resolution and inheritance.",
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["name", "build_settings"],
+    "properties": {
+        "name": {
+            "type": "string",
+            "description": "Project name (no spaces). Used in hex file naming.",
+            "minLength": 1
+        },
+        "hw_version": {
+            "type": "string",
+            "description": "Hardware version string, e.g. '0.0.1'."
+        },
+        "sw_version": {
+            "type": "string",
+            "description": "Software version string, e.g. '0.0.3'."
+        },
+        "build_settings": {
+            "type": "object",
+            "description": "Container for build config. Flattened into top level by fix_project().",
+            "additionalProperties": false,
+            "properties": {
+                "programmer": {
+                    "type": "string",
+                    "description": "Programmer family name (OS resolved at upload). See toolchain/scripts/upload.json for available families.",
+                    "enum": ["Pickit3", "Pickit4", "Pickit5", "ICD-U80"]
+                },
+                "toolchain_options": {
+                    "type": "array",
+                    "items": {"type": "string"},
+                    "description": "Toolchain feature flags. Currently unused.",
+                    "default": []
+                },
+                "src_dir": {
+                    "type": "string",
+                    "default": "src"
+                },
+                "obj_dir": {
+                    "type": "string",
+                    "default": "obj"
+                },
+                "build_dir": {
+                    "type": "string",
+                    "default": "build"
+                },
+                "compiler": {
+                    "type": "string",
+                    "enum": ["legacy", "clang"],
+                    "description": "legacy = xc8 (XC8 v2.x), clang = xc8-cc (XC8 v3.x, currently unusable — larger binaries).",
+                    "default": "legacy"
+                },
+                "compiler_version": {
+                    "type": "string",
+                    "description": "Desired XC8 version, e.g. '2.45'. If set, `make env` validates the installed version. If not set, newest is used.",
+                    "pattern": "^\\d+\\.\\d+$"
+                },
+                "development": {
+                    "$ref": "#/$defs/profile"
+                },
+                "release": {
+                    "$ref": "#/$defs/profile"
+                }
+            }
+        }
+    },
+    "$defs": {
+        "profile": {
+            "type": "object",
+            "description": "Build profile. Inherits keys from build_settings/top level; see variables.md for resolution order.",
+            "additionalProperties": false,
+            "properties": {
+                "processor": {
+                    "type": "string",
+                    "description": "PIC18 processor, e.g. '18F16Q41'. Required — no default.",
+                    "pattern": "^18F\\d+[KQ]\\d+$"
+                },
+                "programmer": {
+                    "type": "string",
+                    "description": "Programmer family name. Inherited from build_settings if not set.",
+                    "enum": ["Pickit3", "Pickit4", "Pickit5", "ICD-U80"],
+                    "default": "Pickit4"
+                },
+                "compiler": {
+                    "type": "string",
+                    "enum": ["legacy", "clang"],
+                    "default": "legacy"
+                },
+                "standard": {
+                    "type": "string",
+                    "enum": ["c89", "c99"],
+                    "description": "C standard. c99 requires xc8-cc (currently unusable).",
+                    "default": "c89"
+                },
+                "float_size": {
+                    "type": "integer",
+                    "enum": [24, 32],
+                    "description": "Float width in bits (legacy compiler only). 24-bit saves ~2.6KB flash.",
+                    "default": 32
+                },
+                "double_size": {
+                    "type": "integer",
+                    "enum": [24, 32],
+                    "description": "Double width in bits (legacy compiler only).",
+                    "default": 32
+                },
+                "defines": {
+                    "type": "array",
+                    "items": {"type": "string"},
+                    "description": "Preprocessor defines passed to XC8, e.g. DEVELOPMENT, SHELL_ENABLED, LOGGING_ENABLED.",
+                    "default": []
+                },
+                "skip_rules": {
+                    "type": "array",
+                    "items": {"type": "string"},
+                    "description": "Glob patterns to exclude from compilation, e.g. 'src/os/json/*'.",
+                    "default": []
+                },
+                "toolchain_options": {
+                    "type": "array",
+                    "items": {"type": "string"},
+                    "default": []
+                }
+            }
+        }
+    }
+}

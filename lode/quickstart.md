@@ -26,6 +26,7 @@ Custom Python build system wrapping Microchip XC8. Make for orchestration, Pytho
 | `make lint` | cppcheck static analysis |
 | `make test` | Host unit tests (`*_test.c`) — [host-tests.md](host-tests.md) |
 | `make config` | Interactive project.yaml wizard |
+| `make env` | Generate .vscode/c_cpp_properties.json from project.yaml |
 
 Host tests: co-locate `foo_test.c` next to pure `foo.c`, then `make test`.
 No XC8. Install compiler once with `uv tool install ziglang` (not in project

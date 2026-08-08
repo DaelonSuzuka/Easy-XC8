@@ -25,13 +25,14 @@ flowchart TD
 | Target | Purpose |
 |--------|---------|
 | `make compile` | Build development hex |
-| `make upload` | Flash to device via programmer |
-| `make release` | Build release hex (optimized, no debug) |
-| `make program` | Program release hex to chip |
+| `make upload` | Flash **development** hex to local dev board/interposer |
+| `make release` | Build release hex (optimized, no debug), renamed with version |
+| `make program` | Flash **release** hex to chip (for shop bulk programmer) |
 | `make clean` | Remove build artifacts |
 | `make lint` | Run cppcheck static analysis |
 | `make test` | Host unit tests for pure modules (`*_test.c`) |
 | `make config` | Run configuration wizard |
+| `make env` | Generate .vscode/c_cpp_properties.json (IntelliSense config) |
 
 Host tests: [host-tests.md](host-tests.md). Zig via `uv tool install ziglang`, not venv.
 
@@ -120,7 +121,10 @@ Two compiler backends:
 | `xc8` | Legacy (XC8 v2.x) | `compiler: legacy` |
 | `xc8-cc` | Clang-based (XC8 v3.x) | `compiler: clang` |
 
-Default is legacy compiler.
+Default is legacy compiler. **`xc8-cc` is currently unusable** — the same
+optimization levels produce ~75% larger binaries that don't fit the 64KB code
+space. Migration to C99 (which requires xc8-cc) is blocked on this toolchain
+regression.
 
 ### Float Size (Legacy Compiler)
 

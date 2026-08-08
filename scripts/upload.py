@@ -47,6 +47,8 @@ if __name__ == "__main__":
     arg = parser.add_argument
 
     project = load_project()
+    # Always uses development profile — upload is for local dev boards/interposers.
+    # Release hexes go to the shop via `make program` (program.py, release profile).
     source = f"{project['build_dir']}/{project['name']}.hex"
     arg("-t", "--target", default=project["development"]["processor"])
     arg("-s", "--source", default=source)
