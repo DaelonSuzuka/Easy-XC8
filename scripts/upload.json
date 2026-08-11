@@ -1,28 +1,26 @@
 {
     "default": "Pickit4",
+
     "Pickit3": {
-        "command": "pk3cmd",
         "target": "-P",
         "source": "-F",
-        "flags": [
-            "-M",
-            "-L"
-        ],
+        "flags": ["-M", "-L"],
         "garbage": [
             "log.0",
             "log.1",
             "log.2",
             "MPLABXLog.xml"
-        ]
+        ],
+        "platforms": {
+            "windows": { "command": "pk3cmd" },
+            "posix": { "command": "pk3cmd" }
+        }
     },
+
     "Pickit4": {
-        "command": "ipecmd",
         "target": "-P",
         "source": "-F",
-        "flags": [
-            "-TPPK4",
-            "-M"
-        ],
+        "flags": ["-TPPK4", "-M"],
         "garbage": [
             "log.0",
             "log.1",
@@ -40,16 +38,17 @@
             "MPLABXLog.xml.10",
             "MPLABXLog.xml.11",
             "MPLABXLog.xml.lck"
-        ]
+        ],
+        "platforms": {
+            "windows": { "command": "ipecmd" },
+            "posix": { "command": "ipecmd.sh" }
+        }
     },
-    "Pickit4-linux": {
-        "command": "ipecmd.sh",
+
+    "Pickit5": {
         "target": "-P",
         "source": "-F",
-        "flags": [
-            "-TPPK4",
-            "-M"
-        ],
+        "flags": ["-TPPK5", "-M"],
         "garbage": [
             "log.0",
             "log.1",
@@ -67,54 +66,26 @@
             "MPLABXLog.xml.10",
             "MPLABXLog.xml.11",
             "MPLABXLog.xml.lck"
-        ]
-    },
-    "Pickit5-linux": {
-        "command": "ipecmd.sh",
-        "target": "-P",
-        "source": "-F",
-        "flags": [
-            "-TPPK5",
-            "-M"
         ],
-        "garbage": [
-            "log.0",
-            "log.1",
-            "log.2",
-            "MPLABXLog.xml",
-            "MPLABXLog.xml.1",
-            "MPLABXLog.xml.2",
-            "MPLABXLog.xml.3",
-            "MPLABXLog.xml.4",
-            "MPLABXLog.xml.5",
-            "MPLABXLog.xml.6",
-            "MPLABXLog.xml.7",
-            "MPLABXLog.xml.8",
-            "MPLABXLog.xml.9",
-            "MPLABXLog.xml.10",
-            "MPLABXLog.xml.11",
-            "MPLABXLog.xml.lck"
-        ]
+        "platforms": {
+            "windows": { "command": "ipecmd" },
+            "posix": { "command": "ipecmd.sh" }
+        }
     },
-    "ICD-U80-win": {
-        "command": "ccsloader",
+
+    "ICD-U80": {
         "target": "-DEVICE=PIC",
         "source": "-WRITE=",
-        "flags": [
-            "-AREAS=ALL",
-            "-POWER=TARGET"
-        ],
-        "garbage": []
-    },
-    "ICD-U80-linux": {
-        "command": "ccsloader",
-        "target": "-DEVICE=PIC",
-        "source": "-WRITE=",
-        "flags": [
-            "-port=COM7",
-            "-AREAS=ALL",
-            "-POWER=TARGET"
-        ],
-        "garbage": []
+        "garbage": [],
+        "platforms": {
+            "windows": {
+                "command": "ccsloader",
+                "flags": ["-AREAS=ALL", "-POWER=TARGET"]
+            },
+            "posix": {
+                "command": "ccsloader",
+                "flags": ["-port=COM7", "-AREAS=ALL", "-POWER=TARGET"]
+            }
+        }
     }
 }

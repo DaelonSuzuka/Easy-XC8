@@ -27,12 +27,8 @@ PROJECT_FILE = project.yaml
 
 # make sure PROJECT_FILE exists
 ifeq (,$(wildcard ./$(PROJECT_FILE)))
-$(warning $(PROJECT_FILE) does not exist! Run "make config" to create it.)
+$(warning $(PROJECT_FILE) does not exist! Create it — see toolchain/lode/configure.md)
 endif
-
-# run configuration wizard
-config: venv
-	$(VENV_PYTHON) $(TOOLCHAIN_DIR)/scripts/configure.py	
 
 # **************************************************************************** #
 # include the other makefile pieces
