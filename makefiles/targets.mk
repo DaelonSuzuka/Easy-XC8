@@ -42,10 +42,10 @@ lint: venv
 # Override with HOST_CC=gcc if needed.
 .PHONY: check-host-cc test
 check-host-cc: venv
-	TOOLCHAIN_DIR=$(TOOLCHAIN_DIR) $(VENV_PYTHON) $(TOOLCHAIN_DIR)/scripts/host_test.py --check-cc
+	$(VENV_PYTHON) $(TOOLCHAIN_DIR)/scripts/host_test.py --check-cc
 
 test: check-host-cc
-	TOOLCHAIN_DIR=$(TOOLCHAIN_DIR) $(VENV_PYTHON) $(TOOLCHAIN_DIR)/scripts/host_test.py
+	$(VENV_PYTHON) $(TOOLCHAIN_DIR)/scripts/host_test.py
 
 #
 project:
